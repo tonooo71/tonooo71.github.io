@@ -1,0 +1,1491 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://gatsby-starter-blog-demo.netlify.com</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 11 Feb 2020 13:17:54 GMT</lastBuildDate><item><title><![CDATA[IPv6環境下でRaspberry pi 4をIPv4接続する]]></title><description><![CDATA[前提 うちのIPv6(IPoE)接続環境は以下の通り    フレッツ光ネクストマンションタイプ(プロパイダ: BIGLOBE) ルーター: WN-AX1167GR2(IO DATA) 実現したいこと Raspberry pi…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2020/200211_ipv4raspi/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2020/200211_ipv4raspi/</guid><pubDate>Tue, 11 Feb 2020 21:15:31 GMT</pubDate><content:encoded>&lt;h2&gt;前提&lt;/h2&gt;
+&lt;p&gt;うちのIPv6(IPoE)接続環境は以下の通り  &lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 401px;&quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/21580bdecaee1d9266059386e50c1304/9144d/ipv6.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 30.174563591022448%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAGCAYAAADDl76dAAAACXBIWXMAAAsSAAALEgHS3X78AAAA9klEQVQY04VQO4qEUBD0dN5m8jmKmUZmGugZDNRIBAUDER0DwQE/4/9TQ73FZXcZ2IaG7qp+9bpLej6f2PcdjG3bMAwDxnH8la/X6yNOrG1bwc/zLDCJYnmew7IspGmK/+I8TxzHIeppmnC73WCa5jcnsbBtG7IswzAMQRRFIZIbu64LRVGgaRrKskRd13g8HuBlVVXhfr8jyzIkSfK1IX9jo6oqoigSgsuyYF1XUfOx53nwfR9d1wnssqhpGui6DsdxBE9c4v38icMUuYavoB1hGCKOY+HV36B3QRCg73vRS1yTQiR4In34mRThDDlufnnF/OTvG4k5whyqv2IxAAAAAElFTkSuQmCC&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;IPv6接続環境&quot;
+        title=&quot;IPv6接続環境&quot;
+        src=&quot;/static/21580bdecaee1d9266059386e50c1304/9144d/ipv6.png&quot;
+        srcset=&quot;/static/21580bdecaee1d9266059386e50c1304/12f09/ipv6.png 148w,
+/static/21580bdecaee1d9266059386e50c1304/e4a3f/ipv6.png 295w,
+/static/21580bdecaee1d9266059386e50c1304/9144d/ipv6.png 401w&quot;
+        sizes=&quot;(max-width: 401px) 100vw, 401px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;フレッツ光ネクストマンションタイプ(プロパイダ: BIGLOBE)&lt;/li&gt;
+&lt;li&gt;ルーター: WN-AX1167GR2(IO DATA)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;実現したいこと&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Raspberry pi 4を購入したので、サーバ用途に使いたい&lt;/li&gt;
+&lt;li&gt;ただこれまでのPCはIPv6接続のままを維持したい&lt;/li&gt;
+&lt;li&gt;IPv6ルータに接続したPCからRaspberry pi 4にローカルでSSH接続したい&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;結果&lt;/h2&gt;
+&lt;p&gt;以下のような構成となった  &lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 581px;&quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/755f8a552ca576bd404ca9b0a92344c4/92d15/ipv6v4.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 44.922547332185886%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAJCAYAAAAywQxIAAAACXBIWXMAAAsSAAALEgHS3X78AAABN0lEQVQoz3WRS6uDMBCF8+Mt+CPclEL3bnQjruqy0I07FUQU+tL6fjvlzCUlCPdAmGQy+TI5EeM40jAMhCjny7LwmKbpt4eI9bZtNM/zL4/58/mkMAx5X5xOJ1rXlTeRwEjTlJIkoaqqGNz3Pde832/O3+93XrdtS5BlWaTrOn0+HxKHw4Fve71efADzOI4piiIuABQAQG+3GxmGQZfLheuyLGOw4zhk2zb5vk8CEHQh1TQNdV3HEUAckHo8HhQEAUdV6PR6vXITAjD4Iod8CoB7lWXJeXT3n4ScSKC8Ec/EQQmHt+gY/uITsK7rml+HWtM0yXVdEipIjegmz3MqioL9BRweHo9H8jyPPxFPh7e4QNM0Op/Pf0BV+7UqwHERPFYFIOD8yypA7XA/IHSFjva+IwdbYM8Xyf2uRKAovxIAAAAASUVORK5CYII=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;IPv6v4接続環境&quot;
+        title=&quot;IPv6v4接続環境&quot;
+        src=&quot;/static/755f8a552ca576bd404ca9b0a92344c4/92d15/ipv6v4.png&quot;
+        srcset=&quot;/static/755f8a552ca576bd404ca9b0a92344c4/12f09/ipv6v4.png 148w,
+/static/755f8a552ca576bd404ca9b0a92344c4/e4a3f/ipv6v4.png 295w,
+/static/755f8a552ca576bd404ca9b0a92344c4/92d15/ipv6v4.png 581w&quot;
+        sizes=&quot;(max-width: 581px) 100vw, 581px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;スイッチングハブ: LS105G(TP-Link)&lt;/li&gt;
+&lt;li&gt;IPv4ルータ: WHR-G301N(Buffalo)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;詳細&lt;/h2&gt;
+&lt;p&gt;IPv6ルータ側の設定は変更せず、IPv4ルータ側の設定をする&lt;br&gt;
+まずIPv4ルータのDHCPサーバ機能を切り、IPv4ルータのIPアドレスをIPv6ルータのDHCPサーバで割当可能なIPアドレスにする必要がある&lt;br&gt;
+例えば、IPv6ルータのIPアドレスが&lt;code class=&quot;language-text&quot;&gt;192.168.0.1&lt;/code&gt;で割当可能なIPアドレスが&lt;code class=&quot;language-text&quot;&gt;192.168.0.2&lt;/code&gt;から&lt;code class=&quot;language-text&quot;&gt;192.168.0.32&lt;/code&gt;だった場合、IPv4ルータのIPアドレスを&lt;code class=&quot;language-text&quot;&gt;192.168.0.31&lt;/code&gt;などに設定する&lt;br&gt;
+そして、IPv6ルータとIPv4ルータを接続することで、IPv6ルータに接続されたPCからIPv4ルータに接続されたRaspberry pi 4にローカルIPでアクセスできるようになる&lt;/p&gt;
+&lt;h2&gt;その他&lt;/h2&gt;
+&lt;p&gt;Raspberry pi 4のファイアウォール設定やIPアドレス固定の設定は別に書くかも&lt;/p&gt;
+&lt;h2&gt;Reference&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://oyamadenshi.com/ipv6-ipv4/&quot;&gt;IPv4 PPPoEとIPv6（v6プラス）を併用する&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[i3ipc-pythonを使う]]></title><description><![CDATA[ウィンドウマネージャi3で新しくワークスペースを追加して表示するスクリプトをPythonとi3のPythonラッパーで書いていたのを、別のPythonラッパーで書き直した   もともと使っていたのはi3-pyというラッパーだったが、どうやら…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/181118_i3ipc-python/181118_i3ipc-python/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/181118_i3ipc-python/181118_i3ipc-python/</guid><pubDate>Sun, 18 Nov 2018 09:24:44 GMT</pubDate><content:encoded>&lt;p&gt;ウィンドウマネージャi3で新しくワークスペースを追加して表示するスクリプトをPythonとi3のPythonラッパーで書いていたのを、別のPythonラッパーで書き直した  &lt;/p&gt;
+&lt;p&gt;もともと使っていたのはi3-pyというラッパーだったが、どうやら7年ほど更新が止まっていたので、割と更新されているi3ipc-pythonに置き換えることにした&lt;br&gt;
+i3-pyはArchのリポジトリにあったがi3ipc-pythonは無いのでpipでインストールする  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; i3ipc
+
+i3 &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; i3ipc&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;Connection&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+w_dict &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;sorted&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;i3&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_workspaces&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; key&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;lambda&lt;/span&gt; x&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; x&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;num&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+i &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; w &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; w_dict&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; i &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; w&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;num&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+        i3&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;command&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&apos;workspace &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;i&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;break&lt;/span&gt;
+    i &lt;span class=&quot;token operator&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    i3&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;command&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&apos;workspace &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;i&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;i3ipc-pythonではi3のコマンドを直接呼び出せるのが便利&lt;br&gt;
+これを&lt;code class=&quot;language-text&quot;&gt;Mod+ZenkakuHankaku&lt;/code&gt;に設定して使っている&lt;/p&gt;</content:encoded></item><item><title><![CDATA[qutebrowserで英和辞書を使う]]></title><description><![CDATA[qutebrowserはアドオンが自由に追加できないのがあれだけど、コマンドで簡単なものなら割とスクリプトで対応できるのが良い点 今回はこの記事読んでそういえばポップアップの辞書ほしいな、と思ったので作ってみた とはいってもポップアップの仕方とかJavascript…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180912_ejdict_for_qb/180912_ejdict_for_qb/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180912_ejdict_for_qb/180912_ejdict_for_qb/</guid><pubDate>Wed, 12 Sep 2018 12:59:44 GMT</pubDate><content:encoded>&lt;p&gt;qutebrowserはアドオンが自由に追加できないのがあれだけど、&lt;code class=&quot;language-text&quot;&gt;spawn&lt;/code&gt;コマンドで簡単なものなら割とスクリプトで対応できるのが良い点&lt;br&gt;
+今回は&lt;a href=&quot;https://qiita.com/wtetsu/items/c43232c6c44918e977c9&quot;&gt;この記事&lt;/a&gt;読んでそういえばポップアップの辞書ほしいな、と思ったので作ってみた&lt;br&gt;
+とはいってもポップアップの仕方とかJavascriptとかわからないし、ものすごく単純なものだけど  &lt;/p&gt;
+&lt;h2&gt;用意するもの&lt;/h2&gt;
+&lt;p&gt;先程の記事にもあったようにejdic-handを使わせていただきます&lt;br&gt;
+まああんまり詳細なものだと表示しきれるか怪しいし、こんなもんでいいかなって…&lt;br&gt;
+ejdic-handは(ワード)(タブ)(説明)のように1行で1つのワードが書かれたtxtファイルです&lt;br&gt;
+なのでpythonで読み込んでそのまま検索させます  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; os
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; sys
+
+
+word &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; sys&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;argv&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;lower&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+us_dir &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; os&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;environ&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;HOME&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;/.local/share/qutebrowser/userscripts&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;us_dir&lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;/ejdict/EJDict/src/ejdic-hand-utf8.txt&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; lines&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; line &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; lines&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; line&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;startswith&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;word&lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;\t&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;line&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+            sys&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;exit&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;これだけだと少し使いづらいので、さらに追記します&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;us_dir&lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;/ejdict/EJDict/src/ejdic-hand-utf8.txt&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; lines&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; line &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; lines&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;# 複数形, 三人称単数形&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; word&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;s&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; line&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;startswith&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;word&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;\t&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;line&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;token keyword&quot;&gt;break&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; word&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;es&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; line&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;startswith&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;word&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;\t&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;line&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;token keyword&quot;&gt;break&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;# 進行形&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; word&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;ing&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; line&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;startswith&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;word&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;\t&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;line&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;token keyword&quot;&gt;break&lt;/span&gt;
+        &lt;span class=&quot;token comment&quot;&gt;# 過去形&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; word&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;d&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; line&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;startswith&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;word&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;\t&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;line&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;token keyword&quot;&gt;break&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; word&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;ed&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; line&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;startswith&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;word&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;\t&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+                &lt;span class=&quot;token keyword&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;line&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;token keyword&quot;&gt;break&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+        sys&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;exit&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;まあ全てはカバーできないですが、基本的な変化をするワードについてはカバーできているはずです  &lt;/p&gt;
+&lt;p&gt;そしてこれをシェルスクリプトを通して実行します&lt;br&gt;
+シェルスクリプトを通す理由は、qutebrowserでuserscriptを実行した際に使用できる&lt;a href=&quot;https://github.com/qutebrowser/qutebrowser/blob/master/doc/userscripts.asciidoc&quot;&gt;変数&lt;/a&gt;をpythonスクリプト内から利用する方法がわからなかったからです…  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token shebang important&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+&lt;span class=&quot;token assign-left variable&quot;&gt;us_dir&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token environment constant&quot;&gt;$HOME&lt;/span&gt;/.local/share/qutebrowser/userscripts&quot;&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$1&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;ejdict&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+    &lt;span class=&quot;token assign-left variable&quot;&gt;word&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;&quot;&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;python $us_dir/ejdict/ejdict.py $QUTE_SELECTED_TEXT&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;&quot;&apos;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$?&lt;/span&gt; -eq &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+        &lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;message-info &lt;span class=&quot;token variable&quot;&gt;$word&lt;/span&gt;&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$QUTE_FIFO&lt;/span&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt;
+        &lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;message-error &apos;Cannot find &lt;span class=&quot;token entity&quot; title=&quot;\&amp;quot;&quot;&gt;\&quot;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;$QUTE_SELECTED_TEXT&lt;/span&gt;&lt;span class=&quot;token entity&quot; title=&quot;\&amp;quot;&quot;&gt;\&quot;&lt;/span&gt; in a dictionary&apos;&quot;&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&gt;&gt;&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$QUTE_FIFO&lt;/span&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;$QUTE_SELECTED_TEXT&lt;/code&gt;は選択したテキストを指します&lt;br&gt;
+これで選択したワードをpythonスクリプトに渡し、返り値をqutebrowserの&lt;code class=&quot;language-text&quot;&gt;message-info&lt;/code&gt;を通して表示させます&lt;br&gt;
+こんな感じに表示されます  &lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 590px;&quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/8203a29140f7fd8325f496d0115d78df/b17f8/screenshot_ejdict.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.25%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAALABQDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABQAB/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAH/2gAMAwEAAhADEAAAAW9B1HYWP//EABsQAAMAAgMAAAAAAAAAAAAAAAABAwQREhQh/9oACAEBAAEFAte8UaQ8ip2aivQ//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAwEBPwE//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwE//8QAGBABAAMBAAAAAAAAAAAAAAAAAAExMqH/2gAIAQEABj8CpUKhrjXGn//EAB0QAAIABwEAAAAAAAAAAAAAAAABESFBkaHR4fD/2gAIAQEAAT8haULC5w+cRGo80G1PFH//2gAMAwEAAgADAAAAEOTf/8QAFREBAQAAAAAAAAAAAAAAAAAAABH/2gAIAQMBAT8QV//EABURAQEAAAAAAAAAAAAAAAAAABAR/9oACAECAQE/EIf/xAAcEAACAgMBAQAAAAAAAAAAAAABEQAhMZHwQWH/2gAIAQEAAT8QMIMCwkRvVgRrRgdfA4Uoz4+R/IS+qn//2Q==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Screenshot ejdict&quot;
+        title=&quot;Screenshot ejdict&quot;
+        src=&quot;/static/8203a29140f7fd8325f496d0115d78df/1c72d/screenshot_ejdict.jpg&quot;
+        srcset=&quot;/static/8203a29140f7fd8325f496d0115d78df/a80bd/screenshot_ejdict.jpg 148w,
+/static/8203a29140f7fd8325f496d0115d78df/1c91a/screenshot_ejdict.jpg 295w,
+/static/8203a29140f7fd8325f496d0115d78df/1c72d/screenshot_ejdict.jpg 590w,
+/static/8203a29140f7fd8325f496d0115d78df/a8a14/screenshot_ejdict.jpg 885w,
+/static/8203a29140f7fd8325f496d0115d78df/fbd2c/screenshot_ejdict.jpg 1180w,
+/static/8203a29140f7fd8325f496d0115d78df/b17f8/screenshot_ejdict.jpg 1600w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;message-info&lt;/code&gt;で表示する都合上、デフォルトの2000msでは早すぎるはずなので5000msに変更しました&lt;br&gt;
+あとはバインドでeかなにかに設定すると、テキスト選択してキー押すだけで写真のように日本語訳が下に表示されるようになります  &lt;/p&gt;
+&lt;p&gt;使った感想としては、オフラインだからかかなり高速ですが辞書が弱いからかヒットしない語句もちらほら見受けられるのがちょっと気になりました  &lt;/p&gt;
+&lt;h2&gt;Refference&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/tonooo71/qutebrowser-scripts&quot;&gt;tonooo71/qutebrowser-scripts&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[qutebrowser上でpocketへ保存する]]></title><description><![CDATA[最近使い始めたqutebrowser、結構使いやすいのもあってメインブラウザがこっちになりつつある 問題点としてはFirefoxだったりChromeで使っていたアドオンが基本的に使えないってのがあったけど、個人的にはlastpassとadblock…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180911_pocket_for_qb/180911_pocket_for_qb/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180911_pocket_for_qb/180911_pocket_for_qb/</guid><pubDate>Tue, 11 Sep 2018 01:04:51 GMT</pubDate><content:encoded>&lt;p&gt;最近使い始めたqutebrowser、結構使いやすいのもあってメインブラウザがこっちになりつつある&lt;br&gt;
+問題点としてはFirefoxだったりChromeで使っていたアドオンが基本的に使えないってのがあったけど、個人的にはlastpassとadblock程度しか使っていなかったからそこまで問題はなく使えてる(lastpassは公式でスクリプトが用意されているし)&lt;br&gt;
+また、&lt;code class=&quot;language-text&quot;&gt;spawn&lt;/code&gt;コマンドでターミナル上でスクリプトを実行できるので簡単なアドオンなら追加できる&lt;br&gt;
+そこで後で読むサービスの1つであるpocketに表示している記事を保存するスクリプトなら簡単にかけそうだったので書いてみた&lt;br&gt;
+いろいろ調べるとpocketのpythonモジュール、ラッパーが結構存在している気がするが、記事を追加するだけであれば必要ないので使っていない  &lt;/p&gt;
+&lt;p&gt;そして書いたものがこれ  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; requests
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; sys
+
+url &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; sys&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;argv&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+consumer_key &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&apos;&lt;/span&gt;
+access_token &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&apos;&lt;/span&gt;
+
+requests&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;post&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;https://getpocket.com/v3/add&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;url&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; url&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;consumer_key&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; consumer_key&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;access_token&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; access_token&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;consumer keyとaccess tokenを事前に取得しておく必要がある&lt;br&gt;
+実行権限を与えたあとで、&lt;code class=&quot;language-text&quot;&gt;config.py&lt;/code&gt;に次のようにでも書けば良い  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;c.aliases = {&amp;#39;pocket&amp;#39;: &amp;#39;spawn ~/.config/qutebrowser/scripts/pocket.py {url}&amp;#39;}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;これで&lt;code class=&quot;language-text&quot;&gt;:pocket&lt;/code&gt;と打つだけで記事が保存される&lt;br&gt;
+改善したい点としては、保存した際になにかメッセージを表示させたいかな、ってぐらい&lt;/p&gt;
+&lt;h3&gt;追記&lt;/h3&gt;
+&lt;p&gt;保存メッセージはdunst使おうかなとも思ったけど、message-infoとしてqutebrowserに表示させることにした&lt;br&gt;
+けどqutebrowserの環境変数?みたいなのはPythonスクリプト内でどう利用したら良いかわからなかったので、一旦シェルスクリプトを経由させるようにした  &lt;/p&gt;
+&lt;h3&gt;Refference&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/tonooo71/qutebrowser-scripts&quot;&gt;GitHub: tonooo71 - qutebrowser-scripts&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Rofiを使って簡単なMPDクライアントを作った]]></title><description><![CDATA[タイトルのとおりです。 Repository: rofi-mpd-client   Rofi rofiはi3のようなタイル型ウィンドウマネージャーでよく用いられているランチャーです。 基本的な動作としては、選びたい項目をrofi…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180906_rofi-mpd-client/180906_rofi-mpd-client/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180906_rofi-mpd-client/180906_rofi-mpd-client/</guid><pubDate>Thu, 06 Sep 2018 07:54:40 GMT</pubDate><content:encoded>&lt;p&gt;タイトルのとおりです。&lt;br&gt;
+Repository: &lt;a href=&quot;https://github.com/tonooo71/rofi-mpd-client&quot;&gt;rofi-mpd-client&lt;/a&gt;  &lt;/p&gt;
+&lt;h2&gt;Rofi&lt;/h2&gt;
+&lt;p&gt;rofiはi3のようなタイル型ウィンドウマネージャーでよく用いられているランチャーです。&lt;br&gt;
+基本的な動作としては、選びたい項目をrofiに渡すとリストとして表示され、選択した項目(の文字列)を返すといったものです。  &lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 590px;&quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/9151117112fbd6f7cc69e9511ed216c4/b17f8/screenshot180906.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.25%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAALABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAEDBf/EABUBAQEAAAAAAAAAAAAAAAAAAAEA/9oADAMBAAIQAxAAAAHmRErQX//EABcQAAMBAAAAAAAAAAAAAAAAAAABERD/2gAIAQEAAQUCrKXUj//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQMBAT8BP//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQIBAT8BP//EABcQAAMBAAAAAAAAAAAAAAAAAAABMSD/2gAIAQEABj8CpXn/xAAcEAACAQUBAAAAAAAAAAAAAAAAAREQITFBkVH/2gAIAQEAAT8hk26SCXr6PNFtXP/aAAwDAQACAAMAAAAQky//xAAUEQEAAAAAAAAAAAAAAAAAAAAQ/9oACAEDAQE/ED//xAAWEQEBAQAAAAAAAAAAAAAAAAAAARH/2gAIAQIBAT8QbH//xAAcEAEAAgEFAAAAAAAAAAAAAAABABFRcdHh8PH/2gAIAQEAAT8QHt92sfY3hyyEEEC2NUW3ln//2Q==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Screenshot180906&quot;
+        title=&quot;Screenshot180906&quot;
+        src=&quot;/static/9151117112fbd6f7cc69e9511ed216c4/1c72d/screenshot180906.jpg&quot;
+        srcset=&quot;/static/9151117112fbd6f7cc69e9511ed216c4/a80bd/screenshot180906.jpg 148w,
+/static/9151117112fbd6f7cc69e9511ed216c4/1c91a/screenshot180906.jpg 295w,
+/static/9151117112fbd6f7cc69e9511ed216c4/1c72d/screenshot180906.jpg 590w,
+/static/9151117112fbd6f7cc69e9511ed216c4/a8a14/screenshot180906.jpg 885w,
+/static/9151117112fbd6f7cc69e9511ed216c4/fbd2c/screenshot180906.jpg 1180w,
+/static/9151117112fbd6f7cc69e9511ed216c4/b17f8/screenshot180906.jpg 1600w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;よく使われているのは上のようにプログラムを選択するランチャーとしてですが、上記のように入力を手動で与えることができるので、色々活用方法が考えられます。&lt;br&gt;
+実際にrofiのwikiページにはユーザーが作成したスクリプトがいくつか紹介されています。(&lt;a href=&quot;https://github.com/DaveDavenport/rofi/wiki/User-scripts&quot;&gt;User scripts&lt;/a&gt;)  &lt;/p&gt;
+&lt;p&gt;今回作ったMPDのクライアントも2つ紹介されているのですが、自分がよく使う機能だったり欲しい機能だったりがなかったりしたので、作ってみることにしました。&lt;br&gt;
+最初は例のごとくシェルスクリプトで作ろうと思ったのですが、挫折したのでおとなしくpython3で記述しました。&lt;br&gt;
+MPDへアクセスするために上記のスクリプトではいずれも&lt;code class=&quot;language-text&quot;&gt;mpc&lt;/code&gt;というCLIクライアントを利用していたのですが、いちいちsubprocessモジュールで呼び出すのもなんかなあって感じだったので、Pythonのモジュールないか探していたらありました。&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;python-musicpd&lt;/code&gt;というモジュールです(数年前に更新がストップしていますが使うには問題ないです)。これはクライアントというよりはラッパーのようなものなので、&lt;code class=&quot;language-text&quot;&gt;mpc&lt;/code&gt;よりも柔軟に機能を呼び出せそうです。  &lt;/p&gt;
+&lt;h2&gt;Rofi-mpd-client&lt;/h2&gt;
+&lt;p&gt;で、実際できたものがこちらです。&lt;br&gt;
+&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 590px;&quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/904792b31622f558c5a12c83d2ab7606/b03a8/rofi-mpd0.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 33.43717549325026%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAHABQDASIAAhEBAxEB/8QAFwABAAMAAAAAAAAAAAAAAAAAAAECBf/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/9oADAMBAAIQAxAAAAHLqWQD/8QAFRABAQAAAAAAAAAAAAAAAAAAECH/2gAIAQEAAQUCj//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQMBAT8BP//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQIBAT8BP//EABUQAQEAAAAAAAAAAAAAAAAAABAx/9oACAEBAAY/Ao//xAAZEAACAwEAAAAAAAAAAAAAAAABEQAQMVH/2gAIAQEAAT8hJ4QpZX//2gAMAwEAAgADAAAAEHQf/8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAwEBPxA//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPxA//8QAGhABAAIDAQAAAAAAAAAAAAAAASFRABARQf/aAAgBAQABPxAycaLcUwBfK1//2Q==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;rofi-mpd-client-top&quot;
+        title=&quot;rofi-mpd-client-top&quot;
+        src=&quot;/static/904792b31622f558c5a12c83d2ab7606/1c72d/rofi-mpd0.jpg&quot;
+        srcset=&quot;/static/904792b31622f558c5a12c83d2ab7606/a80bd/rofi-mpd0.jpg 148w,
+/static/904792b31622f558c5a12c83d2ab7606/1c91a/rofi-mpd0.jpg 295w,
+/static/904792b31622f558c5a12c83d2ab7606/1c72d/rofi-mpd0.jpg 590w,
+/static/904792b31622f558c5a12c83d2ab7606/a8a14/rofi-mpd0.jpg 885w,
+/static/904792b31622f558c5a12c83d2ab7606/b03a8/rofi-mpd0.jpg 963w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 590px;&quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/0d0c481c1788bd7252d196fc45de9d23/a9e43/rofi-mpd2.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 32.780082987551864%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAHABQDASIAAhEBAxEB/8QAFwABAAMAAAAAAAAAAAAAAAAAAAECBf/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/9oADAMBAAIQAxAAAAHLgsqD/8QAFRABAQAAAAAAAAAAAAAAAAAAECH/2gAIAQEAAQUCj//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQMBAT8BP//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQIBAT8BP//EABQQAQAAAAAAAAAAAAAAAAAAABD/2gAIAQEABj8Cf//EABkQAAIDAQAAAAAAAAAAAAAAAAEhABARUf/aAAgBAQABPyEniLFX/9oADAMBAAIAAwAAABAEH//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQMBAT8QP//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQIBAT8QP//EABsQAQACAgMAAAAAAAAAAAAAAAEAESExQWHR/9oACAEBAAE/EAhnT2eRu0A3zHc//9k=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;rofi-mpd-client-artist&quot;
+        title=&quot;rofi-mpd-client-artist&quot;
+        src=&quot;/static/0d0c481c1788bd7252d196fc45de9d23/1c72d/rofi-mpd2.jpg&quot;
+        srcset=&quot;/static/0d0c481c1788bd7252d196fc45de9d23/a80bd/rofi-mpd2.jpg 148w,
+/static/0d0c481c1788bd7252d196fc45de9d23/1c91a/rofi-mpd2.jpg 295w,
+/static/0d0c481c1788bd7252d196fc45de9d23/1c72d/rofi-mpd2.jpg 590w,
+/static/0d0c481c1788bd7252d196fc45de9d23/a8a14/rofi-mpd2.jpg 885w,
+/static/0d0c481c1788bd7252d196fc45de9d23/a9e43/rofi-mpd2.jpg 964w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 590px;&quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/0d0c481c1788bd7252d196fc45de9d23/a9e43/rofi-mpd2.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 32.780082987551864%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAHABQDASIAAhEBAxEB/8QAFwABAAMAAAAAAAAAAAAAAAAAAAECBf/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/9oADAMBAAIQAxAAAAHLgsqD/8QAFRABAQAAAAAAAAAAAAAAAAAAECH/2gAIAQEAAQUCj//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQMBAT8BP//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQIBAT8BP//EABQQAQAAAAAAAAAAAAAAAAAAABD/2gAIAQEABj8Cf//EABkQAAIDAQAAAAAAAAAAAAAAAAEhABARUf/aAAgBAQABPyEniLFX/9oADAMBAAIAAwAAABAEH//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQMBAT8QP//EABQRAQAAAAAAAAAAAAAAAAAAABD/2gAIAQIBAT8QP//EABsQAQACAgMAAAAAAAAAAAAAAAEAESExQWHR/9oACAEBAAE/EAhnT2eRu0A3zHc//9k=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;rofi-mpd-client-album&quot;
+        title=&quot;rofi-mpd-client-album&quot;
+        src=&quot;/static/0d0c481c1788bd7252d196fc45de9d23/1c72d/rofi-mpd2.jpg&quot;
+        srcset=&quot;/static/0d0c481c1788bd7252d196fc45de9d23/a80bd/rofi-mpd2.jpg 148w,
+/static/0d0c481c1788bd7252d196fc45de9d23/1c91a/rofi-mpd2.jpg 295w,
+/static/0d0c481c1788bd7252d196fc45de9d23/1c72d/rofi-mpd2.jpg 590w,
+/static/0d0c481c1788bd7252d196fc45de9d23/a8a14/rofi-mpd2.jpg 885w,
+/static/0d0c481c1788bd7252d196fc45de9d23/a9e43/rofi-mpd2.jpg 964w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;一番上はrofiおなじみの検索バーです。インクリメンタルサーチ可能です。&lt;br&gt;
+2列目は今再生している曲を表示します。またプレイリストにおける現在の位置も最後尾に表示します。&lt;br&gt;
+そして選択リストでは、再生/停止コマンドと曲をプレイリストに追加します。私の環境ではアーティスト名/アルバム名/のようなフォルダ構造にしているので、MPDのインデックスにおけるrootの場所では追加できないようにしています。&lt;br&gt;
+一応アルバムを選択すると曲まで表示しますが、曲を選択してもそれに対しては未実装なので何も起きません。  &lt;/p&gt;
+&lt;p&gt;これCLIファイラーのように見えますが、rofiなのでなにか選択する毎に一旦rofiは終了します。そして再び立ち上がる、といった動作をするのでチカチカします。&lt;/p&gt;
+&lt;h2&gt;メモ&lt;/h2&gt;
+&lt;p&gt;フォルダ間を遷移させるためにrofiを何回も起動させなければいけなかったので、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+    rofi&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;start&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;みたいに書いていたら、rofiが終了できなくなって詰みかけました。(rofiが最前面に表示され、rofiへの入力が最優先される仕様上、いかなるキーのタイプを受け付けないのが理由です)&lt;br&gt;
+対策としてrofiから返ってくる要素がない場合whileループから脱出するようにしました。つまりEscキーを押せばrofiはなんの要素も選択されることなく終了するので、rofiの無限ループは起こりません。  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[qutebrowserをインストール]]></title><description><![CDATA[qutebrowserをインストールした際に(正確にはインストール途中に)、大量にエラーが出て(conflictして)失敗してしまう   どうやらpython-sixとpython-setuptoolsが問題っぽいがどういうことか調べてみたら、pip…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180831_qutebrowser/180831_qutebrowser/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180831_qutebrowser/180831_qutebrowser/</guid><pubDate>Fri, 31 Aug 2018 13:38:56 GMT</pubDate><content:encoded>&lt;p&gt;qutebrowserをインストールした際に(正確にはインストール途中に)、大量にエラーが出て(conflictして)失敗してしまう  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;...
+error: failed to commit transaction (conflicting files)
+python-six: /usr/lib/python3.7/site-packages/__pycache__/six.cpython-37.pyc exists in filesystem
+python-six: /usr/lib/python3.7/site-packages/six.py exists in filesystem
+python-setuptools: /usr/bin/easy_install exists in filesystem
+python-setuptools: /usr/bin/easy_install-3.7 exists in filesystem
+python-setuptools: /usr/lib/python3.7/site-packages/__pycache__/easy_install.cpython-37.pyc exists in filesystem
+python-setuptools: /usr/lib/python3.7/site-packages/easy_install.py exists in filesystem
+...&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;どうやらpython-sixとpython-setuptoolsが問題っぽいがどういうことか調べてみたら、pipでインストールしているものとpacmanでインストールしようとしているものが衝突しているようだ&lt;br&gt;
+ぐぐったら&lt;code class=&quot;language-text&quot;&gt;--force&lt;/code&gt;オプションを使えだったり&lt;code class=&quot;language-text&quot;&gt;--overwrite&lt;/code&gt;やれだったりあったけど、やっぱりここは素直にpip側のsetuptoolsとsixを削除することでインストールは成功した&lt;br&gt;
+調べると色々pipじゃなくてpacmanで入れられるパッケージもあるみたいだし、できればどっちかに統一したい感じもある…  &lt;/p&gt;
+&lt;h3&gt;追記&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;pip&lt;/code&gt;でインストールしていたパッケージをArch Linuxのパッケージに置き換えてみた&lt;br&gt;
+ほとんどのパッケージは存在していたが、いくつかAURにも存在しないパッケージがあった  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;lit&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;typing&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;lit&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;lit is a portable tool for executing LLVM and Clang style test suites, summarizing their results, and providing indication of failures. lit is designed to be a lightweight testing tool with as simple a user interface as possible.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;LLVMやClangを用いたコードのテストに用いられるものだろうか、いつインストールしたのかよくわからないが…  &lt;/p&gt;
+&lt;h4&gt;typing&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;This is a backport of the standard library typing module to Python versions older than 3.5. (See note below for newer versions.)&lt;/p&gt;
+&lt;p&gt;Typing defines a standard notation for Python function and variable type annotations. The notation can be used for documenting code in a concise, standard format, and it has been designed to also be used by static and runtime type checkers, static analyzers, IDEs and other tools.&lt;/p&gt;
+&lt;p&gt;NOTE: in Python 3.5 and later, the typing module lives in the stdlib, and installing this package has NO EFFECT. To get a newer version of the typing module in Python 3.5 or later, you have to upgrade to a newer Python (bugfix) version. For example, typing in Python 3.6.0 is missing the definition of ‘Type’ – upgrading to 3.6.2 will fix this.&lt;/p&gt;
+&lt;p&gt;Also note that most improvements to the typing module in Python 3.7 will not be included in this package, since Python 3.7 has some built-in support that is not present in older versions (See PEP 560.)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;ヒントを表示するなにかみたいだが、よく読むとPython 3.5以降では組み込まれているから必要ないよ、Python 3.7だと標準の機能としてビルトインされてるよ、みたいに書いてある&lt;br&gt;
+じゃあなおさらなんでインストールされているのか…&lt;/p&gt;
+&lt;p&gt;実際pipでバージョン管理するにはひと手間かかるし、pacmanやyayで管理ができるのは手間がかからなくて助かる感はある&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Hugoの設定する!]]></title><description><![CDATA[ちょっと時間ができたのでHugoの設定をば…   Permalinks Configuration  今までは記事の場所が、 だったのを、 みたいに年、月の階層構造になるようにした 使える変数はここで   Sitemap SitemapをGoogle…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180831_hugosetting/180831_hugosetting/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180831_hugosetting/180831_hugosetting/</guid><pubDate>Fri, 31 Aug 2018 12:58:31 GMT</pubDate><content:encoded>&lt;p&gt;ちょっと時間ができたのでHugoの設定をば…  &lt;/p&gt;
+&lt;h3&gt;Permalinks Configuration&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;config.toml&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;permalinks&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;token key property&quot;&gt;post&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;/:year/:month/:filename/&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;今までは記事の場所が、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;https://tonooo71.github.io/post/180831_hugosetting/&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;だったのを、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;https://tonooo71.github.io/post/2018/08/180831_hugosetting/&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;みたいに年、月の階層構造になるようにした&lt;br&gt;
+使える変数は&lt;a href=&quot;https://gohugo.io/content-management/urls/&quot;&gt;ここ&lt;/a&gt;で  &lt;/p&gt;
+&lt;h3&gt;Sitemap&lt;/h3&gt;
+&lt;p&gt;SitemapをGoogleに登録して検索に引っ掛けて貰おう的な&lt;br&gt;
+最初&lt;code class=&quot;language-text&quot;&gt;config.toml&lt;/code&gt;のbaseurlをちゃんと設定してなかったのでちょっと躓いた  &lt;/p&gt;
+&lt;p&gt;まずはGoogleの&lt;a href=&quot;https://www.google.com/webmasters/tools/home&quot;&gt;Search Console&lt;/a&gt;に登録する&lt;br&gt;
+そして自分のサイトを追加する、自分は無難にhtmlファイルをアップロードした&lt;br&gt;
+最後にSitemapを追加する、GitHub Pagesだと&lt;code class=&quot;language-text&quot;&gt;https://xxxx.github.io/sitemap.xml&lt;/code&gt;に生成されてるはずなので選択する&lt;br&gt;
+これでsitemap.xmlに問題がなければOK、何かエラーが出たらbaseurlだったりなにか設定間違っている可能性がある  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[NeovimでLSPを使う]]></title><description><![CDATA[C++の開発環境をNeovimで実現しようとしていろいろ調べていたところ、NeovimにLanguage Server Protocol(LSP)を導入したという記事をいくつか見つけたのでやってみた。   LSP…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180811_neovimlsp/180811_neovimlsp/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180811_neovimlsp/180811_neovimlsp/</guid><pubDate>Sat, 11 Aug 2018 06:56:24 GMT</pubDate><content:encoded>&lt;p&gt;C++の開発環境をNeovimで実現しようとしていろいろ調べていたところ、NeovimにLanguage Server Protocol(LSP)を導入したという記事をいくつか見つけたのでやってみた。  &lt;/p&gt;
+&lt;p&gt;LSPの説明は&lt;a href=&quot;https://qiita.com/atsushieno/items/ce31df9bd88e98eec5c4&quot;&gt;この記事&lt;/a&gt;読むとして、概略してコードの補完や参照などがエディタの種類にかかわらずアクセスすることで利用可能になるサーバーという認識で良いのかな。&lt;br&gt;
+これまでも&lt;code class=&quot;language-text&quot;&gt;deoplete&lt;/code&gt;と言語ごとにプラグインを導入することで補完をすることはできていたんだけど、LSP使うと大分高速にできる、さらにリンターとしても利用できるみたいなので乗り換えてみようと思った次第です。  &lt;/p&gt;
+&lt;h3&gt;LanguageClient-neovim&lt;/h3&gt;
+&lt;p&gt;まずNeovimでLSPを利用するために、&lt;a href=&quot;https://github.com/autozimu/LanguageClient-neovim&quot;&gt;LanguageClient-neovim&lt;/a&gt;をインストールします。&lt;br&gt;
+私はdein.vimでプラグイン管理しているので、  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;autozimu/LanguageClient-neovim&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;rev&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;next&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;build&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;bash install.sh&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;と&lt;code class=&quot;language-text&quot;&gt;dein.toml&lt;/code&gt;に書き込んでNeovimを起動させインストールします。&lt;br&gt;
+LanguageClient-neovim以外にもLSPのプラグインは&lt;a href=&quot;https://github.com/prabirshrestha/vim-lsp&quot;&gt;vim-lsp&lt;/a&gt;とかあるみたいなんだけど、LanguageClient-neovimは&lt;code class=&quot;language-text&quot;&gt;deoplete&lt;/code&gt;で使える!と見たので、よく意味はわかってないんですがこちらを選択しました。&lt;br&gt;
+そして言語ごとのサーバーをインストールし、LanguageClient-neovimで参照することでLSPを利用します。&lt;br&gt;
+利用できるサーバーの一覧は&lt;a href=&quot;https://langserver.org/&quot;&gt;こちら&lt;/a&gt;のページに載っています。  &lt;/p&gt;
+&lt;h3&gt;C/C++&lt;/h3&gt;
+&lt;p&gt;C/C++用のサーバーは&lt;code class=&quot;language-text&quot;&gt;clangd&lt;/code&gt;,&lt;code class=&quot;language-text&quot;&gt;cquery&lt;/code&gt;,&lt;code class=&quot;language-text&quot;&gt;ccls&lt;/code&gt;があるみたいで、&lt;code class=&quot;language-text&quot;&gt;clangd&lt;/code&gt;だけが機能的に他のものに劣っているようなことが先程の一覧ページに書いてあります。&lt;br&gt;
+なので最初は&lt;code class=&quot;language-text&quot;&gt;cquery&lt;/code&gt;を導入しようと思ってたんですが、なんかうまく動かなかったので結局&lt;code class=&quot;language-text&quot;&gt;clangd&lt;/code&gt;使うことにしました。&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;clangd&lt;/code&gt;はもともと&lt;code class=&quot;language-text&quot;&gt;clang&lt;/code&gt;とか&lt;code class=&quot;language-text&quot;&gt;llvm&lt;/code&gt;をインストールしていたので、私の環境では何も追加でインストールせず使えました。&lt;br&gt;
+設定は、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;autozimu/LanguageClient-neovim&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;rev&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;next&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;build&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;bash install.sh&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;hook_add&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&apos;
+    set hidden
+    let g:LanguageClient_autoStart = 1
+    let g:LanguageClient_serverCommands = {
+        \ &apos;c&apos;: [&apos;clangd&apos;],
+        \ &apos;cpp&apos;: [&apos;clangd&apos;],
+\ }
+&apos;&apos;&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;と書けば(とりあえずは)動きます。&lt;br&gt;
+動いているかの確認は、適当なC/C++ファイルを開いてコード打って補完候補が出てくるかどうかでできます。&lt;br&gt;
+ただ、私の環境だとそもそもLSPが立ち上がっていなかったり、立ち上がっていても&lt;code class=&quot;language-text&quot;&gt;clangd&lt;/code&gt;を呼び出してくれないなどトラブルが頻発しました。&lt;br&gt;
+設定を&lt;code class=&quot;language-text&quot;&gt;dein.toml&lt;/code&gt;の上の方に書いたら直ったんで今は動いてますが、どうして起動しなかったりしたのかは結局よくわからないです。  &lt;/p&gt;
+&lt;h4&gt;追記&lt;/h4&gt;
+&lt;p&gt;これ&lt;code class=&quot;language-text&quot;&gt;hook_source&lt;/code&gt;じゃなくて&lt;code class=&quot;language-text&quot;&gt;hook_add&lt;/code&gt;って書く必要があったぽい、そのせいだったかもしれない。  &lt;/p&gt;
+&lt;p&gt;設定中の&lt;code class=&quot;language-text&quot;&gt;let g:LanguageClient_autoStart = 1&lt;/code&gt;はLSPを自動起動するというものです。起動していなくても、手動で&lt;code class=&quot;language-text&quot;&gt;:LanguageClientStart&lt;/code&gt;とコマンドに打つことで起動することができます。  &lt;/p&gt;
+&lt;h3&gt;Python&lt;/h3&gt;
+&lt;p&gt;どうせなのでPython用のLSPも導入します。&lt;br&gt;
+2つあるようですが、GitHubのスター数的に&lt;a href=&quot;https://github.com/palantir/python-language-server&quot;&gt;Python Language Server&lt;/a&gt;を導入すればいいでしょう。&lt;br&gt;
+インストールは&lt;code class=&quot;language-text&quot;&gt;pip install python-language-server&lt;/code&gt;で行います。&lt;br&gt;
+そして&lt;code class=&quot;language-text&quot;&gt;README.md&lt;/code&gt;に書かれてあるとおり、いくつかのプラグインをオプションとして用いることが可能なようです。&lt;br&gt;
+私はこの中からリンターである&lt;code class=&quot;language-text&quot;&gt;pycodestyle&lt;/code&gt;(以前まで&lt;code class=&quot;language-text&quot;&gt;pep8&lt;/code&gt;と呼ばれていたもの)とコードを保存時にフォーマットしてくれる&lt;code class=&quot;language-text&quot;&gt;yapf&lt;/code&gt;を導入しました。&lt;br&gt;
+導入には、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ pip install &amp;#39;python-language-server[pycodestyle]&amp;#39;
+$ pip install &amp;#39;python-language-server[yapf]&amp;#39;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;などとすれば良いようです。&lt;br&gt;
+そしてLanguageClient-neovimの設定に、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;    let g:LanguageClient_serverCommands &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;
+        \ &lt;span class=&quot;token string&quot;&gt;&apos;python&apos;&lt;/span&gt;: &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;pyls&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;
+\ &lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;を追記すれば動きます。&lt;br&gt;
+おそらくこれでリンターも動くはずなので(まだ確認していないのですが)、&lt;code class=&quot;language-text&quot;&gt;ale&lt;/code&gt;で&lt;code class=&quot;language-text&quot;&gt;pylint&lt;/code&gt;とかを動かしていたのですが、これらを削除しました。&lt;br&gt;
+こんな感じです。まだキーコンフィグ全く設定していないので、そのうち追記するかと思います。  &lt;/p&gt;
+&lt;h3&gt;Reference&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/arwtyxouymz0110/items/b09ef1ed7a2f7bf1c5e6&quot;&gt;NeovimでC/C++のIDE(っぽい)環境を構築する&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/autozimu/LanguageClient-neovim&quot;&gt;LanguageClient-neovim&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://wheson-prog.hatenablog.jp/entry/2018/06/05/141730&quot;&gt;neovimでLSP(LanguageServerProtocol)を使ってみる&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/palantir/python-language-server&quot;&gt;Python Language Server&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/kouichi_c/items/5f047ab3a7c64277e97c&quot;&gt;Language Server Protocolを使ってvimでpython入力補完&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[デュアルブートでVirtualBox]]></title><description><![CDATA[今はWindows10とArch LinuxとのデュアルブートをしていてメインではLinux使っているんだけど、どうしてもWindows使いたい場合があって(OfficeとかOfficeとかOfficeとか) これまではLinux側でVirtualBoxにWindows…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180802_virtualbox_vkms/180802_virtualbox_vkms/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180802_virtualbox_vkms/180802_virtualbox_vkms/</guid><pubDate>Wed, 01 Aug 2018 23:33:02 GMT</pubDate><content:encoded>&lt;p&gt;今はWindows10とArch LinuxとのデュアルブートをしていてメインではLinux使っているんだけど、どうしてもWindows使いたい場合があって(OfficeとかOfficeとかOfficeとか)&lt;br&gt;
+これまではLinux側でVirtualBoxにWindowsを入れて使っていたんだけど、何分容量が少ないノートPCを使っているから実質トリプルブートになるこのやりかたは厳しいものがあった&lt;br&gt;
+そこでデュアルブートをしている実パーティションのWindowsをLinux側から呼び出せばいいんじゃないかと思って調べてみたらなんかできそうだったのでやってみた  &lt;/p&gt;
+&lt;p&gt;結論から言うとできたけどちょっと問題がいろいろ起きてやっぱやめようってなってしまったが…  &lt;/p&gt;
+&lt;h3&gt;やったこと&lt;/h3&gt;
+&lt;p&gt;基本的には&lt;a href=&quot;https://wiki.archlinux.jp/index.php/VirtualBox/%E3%83%92%E3%83%B3%E3%83%88%E3%81%A8%E3%83%86%E3%82%AF%E3%83%8B%E3%83%83%E3%82%AF#Windows_.E3.81.AE.E3.83.91.E3.83.BC.E3.83.86.E3.82.A3.E3.82.B7.E3.83.A7.E3.83.B3.E3.82.92_VirtualBox_.E3.81.A7.E8.B5.B7.E5.8B.95&quot;&gt;ArchWiki&lt;/a&gt;に則ってやった&lt;br&gt;
+手順としては、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;自分のユーザーをグループ&lt;code class=&quot;language-text&quot;&gt;disk&lt;/code&gt;と&lt;code class=&quot;language-text&quot;&gt;vboxusers&lt;/code&gt;に追加&lt;/li&gt;
+&lt;li&gt;ArchWikiの通りudevを設定&lt;/li&gt;
+&lt;li&gt;仮想ディスクイメージファイルを作成&lt;/li&gt;
+&lt;li&gt;VirtualBoxの設定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ディスクイメージファイル作成はちょっと詰まった&lt;br&gt;
+自分のディスク構成は、  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ fdisk -l
+Disk /dev/nvme0n1: 238.5 GiB, 256060514304 bytes, 500118192 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disklabel type: gpt
+Disk identifier: 06321AVC-9994-4055-9FFF-F62FFC20193E
+
+Device             Start       End   Sectors   Size Type
+/dev/nvme0n1p1      2048    206847    204800   100M EFI System
+/dev/nvme0n1p2    206848    239615     32768    16M Microsoft reserved
+/dev/nvme0n1p3    239616 168017419 167777804    80G Microsoft basic data
+/dev/nvme0n1p4 168017920 496429055 328411136 156.6G Microsoft basic data
+/dev/nvme0n1p5 496431104 500117503   3686400   1.8G Windows recovery environment&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;ってなっているんだけど(nvme0n1p3がWindows10、nvme0n1p4がArch Linux)、Wikiの通りにやるとUEFIシェルが出てきてどうにもなんなくなってしまう(できるのかもしれないけどよくわからん)&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ vboxmanage internalcommands createrawvmdk -filename /path/to/vm/folder/windows.vmdk -rawdisk /dev/nvme0n1 -partitions 2,3 -relative&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;なのでブートローダーがある領域まで突っ込めばなんとかなるんじゃないかと思ってやってみた&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ vboxmanage internalcommands createrawvmdk -filename /path/to/vm/folder/windows.vmdk -rawdisk /dev/nvme0n1 -partitions 1,2,3 -relative&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;すると起動成功(systemd-bootから始まってしまうのでそこでWindows選択する必要が出たが)&lt;br&gt;
+普通に使えるしいいじゃん、ディスク容量も節約できるし&lt;/p&gt;
+&lt;h3&gt;やったぜ&lt;/h3&gt;
+&lt;p&gt;って思ってたけど大きな問題点が2つ出た  &lt;/p&gt;
+&lt;p&gt;1つはVirtualBoxで起動させるとWindowsのライセンス認証が通らない、通ってない状態になる&lt;br&gt;
+なので普通にWindows起動させたときにライセンス認証いちいちする必要が出てきてしまう&lt;br&gt;
+(Wikiには設定でHyper-Vをオンにするとライセンス問題回避できるかもね、って書いてあるけど自分は無理でした)&lt;br&gt;
+あとOfficeのライセンス認証も通らなかった&lt;/p&gt;
+&lt;p&gt;これより面倒な問題あって、VirtualBoxでWindowsを起動したあと普通にWindowsを起動させて終了させるとなぜかブートローダーの順序が変わってしまうのに気がついた&lt;br&gt;
+つまりいつもはLinuxのsystemd-bootを使っているんだけど、なぜかWindowsのブートローダーが優先順位高く変更されてしまい、Linuxが起動できなくなってしまう(いちいちBIOS設定で変更しないといけなくなってしまった)  &lt;/p&gt;
+&lt;p&gt;そこまでして実パーティションのWindowsを呼び出して使うか…となってしまったので、結局元通りVirtualBox上にインストールして今は使ってる&lt;/p&gt;
+&lt;h3&gt;Reference&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.ncaq.net/2018/01/31/17/12/33/&quot;&gt;デュアルブートしている環境でVirtualBoxでホストOSをLinuxとしWindowsをゲストOSとして起動する&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://medium.com/@matsu_hiroshi/%E5%AE%9F%E7%9B%B8%E3%82%92%E4%BB%AE%E6%83%B3%E7%9A%84%E3%81%AB%E7%AA%93%E9%96%8B%E3%81%8F%E3%81%93%E3%81%A8-e37ae0c61ebf&quot;&gt;実相を仮想的に窓開くこと&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://wiki.archlinux.jp/index.php/VirtualBox/%E3%83%92%E3%83%B3%E3%83%88%E3%81%A8%E3%83%86%E3%82%AF%E3%83%8B%E3%83%83%E3%82%AF#Windows_.E3.81.AE.E3.83.91.E3.83.BC.E3.83.86.E3.82.A3.E3.82.B7.E3.83.A7.E3.83.B3.E3.82.92_VirtualBox_.E3.81.A7.E8.B5.B7.E5.8B.95&quot;&gt;Windows のパーティションを VirtualBox で起動&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Arch Linux再インストールで詰まった点]]></title><description><![CDATA[デュアルブート Windows: 80GB Arch Linux: 160GB   Windowsのパーティションツールでは120GBぐらいまでしかできなかったから、フリーソフト使用した Arch Linuxインストール arch-chroot…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180716_reinstall_arch/180716_reinstall_arch/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180716_reinstall_arch/180716_reinstall_arch/</guid><pubDate>Sun, 15 Jul 2018 17:05:47 GMT</pubDate><content:encoded>&lt;h2&gt;デュアルブート&lt;/h2&gt;
+&lt;p&gt;Windows: 80GB&lt;br&gt;
+Arch Linux: 160GB  &lt;/p&gt;
+&lt;p&gt;Windowsのパーティションツールでは120GBぐらいまでしかできなかったから、フリーソフト使用した&lt;/p&gt;
+&lt;h2&gt;Arch Linuxインストール&lt;/h2&gt;
+&lt;p&gt;arch-chrootでインストールすべきもの  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;NetworkManager&lt;/li&gt;
+&lt;li&gt;tlp&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Arch Linux設定&lt;/h2&gt;
+&lt;h4&gt;日本語キーボード&lt;/h4&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;loadkeys jp106&lt;/code&gt;しているのにターミナル上で日本語キーボードにならない(英語キーボードになる)&lt;br&gt;
+これは&lt;code class=&quot;language-text&quot;&gt;setxkbmap -layout jp&lt;/code&gt;とすることで治る&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;loadkeys jp106&lt;/code&gt;はCUI環境に限り有効らしい&lt;/p&gt;
+&lt;h4&gt;ncmpcppでmp3が表示されない&lt;/h4&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;u&lt;/code&gt;を押してロードするのを忘れていた&lt;/p&gt;
+&lt;h4&gt;yaourtがない&lt;/h4&gt;
+&lt;p&gt;というかarchlinux.frに繋がらない…&lt;br&gt;
+手動で&lt;code class=&quot;language-text&quot;&gt;yay&lt;/code&gt;をインストールした&lt;/p&gt;
+&lt;h4&gt;ranger&lt;/h4&gt;
+&lt;p&gt;rangerだけはdotfilesに一部の設定ファイルしか保存してないので、一旦設定をコピーしてからdotfilesのファイルで上書きする  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ ranger --copy-config=all&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;USB認識&lt;/h4&gt;
+&lt;p&gt;今回もマジでよくわからなかった&lt;br&gt;
+Udisksっぽいんだけど、結局Nautilusで解決してしまった&lt;/p&gt;</content:encoded></item><item><title><![CDATA[ソースコードをPDFで出力したい]]></title><description><![CDATA[タイトルの通り 他人のソースコードだったりを読むときに普段iPad ProにPDFとしてダウンロードし、書き込んだりマークしたりして読むことが多い これまではWindowsでこの変換(というか印刷)を行っていたが、Linuxを常用するようになったのでLinux…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180619_enscript/180619_enscript/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180619_enscript/180619_enscript/</guid><pubDate>Tue, 19 Jun 2018 10:33:19 GMT</pubDate><content:encoded>&lt;p&gt;タイトルの通り&lt;/p&gt;
+&lt;p&gt;他人のソースコードだったりを読むときに普段iPad ProにPDFとしてダウンロードし、書き込んだりマークしたりして読むことが多い&lt;/p&gt;
+&lt;p&gt;これまではWindowsでこの変換(というか印刷)を行っていたが、Linuxを常用するようになったのでLinuxでも簡単にできるようにしてみた&lt;/p&gt;
+&lt;h4&gt;enscript&lt;/h4&gt;
+&lt;p&gt;これはソースコードをPostScriptやhtmlに変換してくれるパッケージである&lt;/p&gt;
+&lt;p&gt;Arch LinuxであればPacmanでインストールする&lt;/p&gt;
+&lt;p&gt;何ができるかというと、行番号表示やソースコードのシンタックスハイライトが可能になる&lt;/p&gt;
+&lt;p&gt;例えば、C++のソースコードをPSととして出力するには、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ enscript --highlight=cpp --color -C -H1 main.cpp -o main.cpp.ps&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;とすればよい&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;--highlight=**&lt;/code&gt;でソースコードの言語を指定することができる&lt;/p&gt;
+&lt;p&gt;どの言語が使えるかは&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ enscript --help-highlight&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;で調べることができる(普段使いしそうな言語は殆ど網羅されている感じである)&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;-C&lt;/code&gt;は左側に行番号を表示してくれる&lt;/p&gt;
+&lt;h4&gt;ps2pdf&lt;/h4&gt;
+&lt;p&gt;PSをPDFに変換するには、このパッケージを使う(なぜか既にインストール済みだった)&lt;/p&gt;
+&lt;p&gt;使い方は簡単で&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ ps2pdf main.cpp.ps&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;とすると&lt;code class=&quot;language-text&quot;&gt;main.cpp.pdf&lt;/code&gt;というファイルが生成される&lt;/p&gt;
+&lt;h4&gt;おまけ&lt;/h4&gt;
+&lt;p&gt;これらを組み合わせた、引数にC++のソースコードを指定すればPDFが出力される単純なシェルスクリプト&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token shebang important&quot;&gt;#!/bin/bash&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$#&lt;/span&gt; -eq &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+	&lt;span class=&quot;token assign-left variable&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;$1&lt;/span&gt;
+	enscript --highlight&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;cpp --color -C -H1 &lt;span class=&quot;token variable&quot;&gt;$filename&lt;/span&gt; -o &lt;span class=&quot;token variable&quot;&gt;$filename&lt;/span&gt;.ps
+	ps2pdf &lt;span class=&quot;token variable&quot;&gt;$filename&lt;/span&gt;.ps
+&lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[Polybarの設定終わったぞ]]></title><description><![CDATA[外観  色はNeoVimのOnedarkテーマに揃えた i3blocks…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180607_polybar_setting/180607_polybar_setting/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180607_polybar_setting/180607_polybar_setting/</guid><pubDate>Thu, 07 Jun 2018 04:24:32 GMT</pubDate><content:encoded>&lt;h2&gt;外観&lt;/h2&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 590px;&quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/877af3c5bfba5be1925af38feaa25183/b17f8/screenshot1806071323.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 56.25%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAALABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAEEBf/EABUBAQEAAAAAAAAAAAAAAAAAAAEA/9oADAMBAAIQAxAAAAHlVErQL//EABkQAAIDAQAAAAAAAAAAAAAAAAECABARMf/aAAgBAQABBQKz2Koz/8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAwEBPwE//8QAFREBAQAAAAAAAAAAAAAAAAAAABH/2gAIAQIBAT8BV//EABQQAQAAAAAAAAAAAAAAAAAAACD/2gAIAQEABj8CX//EABkQAAIDAQAAAAAAAAAAAAAAAAABEBGBIf/aAAgBAQABPyHTS2LTQz0j/9oADAMBAAIAAwAAABC0D//EABURAQEAAAAAAAAAAAAAAAAAAAAR/9oACAEDAQE/EFf/xAAVEQEBAAAAAAAAAAAAAAAAAAAAAf/aAAgBAgEBPxBYf//EABoQAQACAwEAAAAAAAAAAAAAAAEAESExcZH/2gAIAQEAAT8QtXK6scaTCjb7AEFBEl7tes//2Q==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;Screenshot1806071323&quot;
+        title=&quot;Screenshot1806071323&quot;
+        src=&quot;/static/877af3c5bfba5be1925af38feaa25183/1c72d/screenshot1806071323.jpg&quot;
+        srcset=&quot;/static/877af3c5bfba5be1925af38feaa25183/a80bd/screenshot1806071323.jpg 148w,
+/static/877af3c5bfba5be1925af38feaa25183/1c91a/screenshot1806071323.jpg 295w,
+/static/877af3c5bfba5be1925af38feaa25183/1c72d/screenshot1806071323.jpg 590w,
+/static/877af3c5bfba5be1925af38feaa25183/a8a14/screenshot1806071323.jpg 885w,
+/static/877af3c5bfba5be1925af38feaa25183/fbd2c/screenshot1806071323.jpg 1180w,
+/static/877af3c5bfba5be1925af38feaa25183/b17f8/screenshot1806071323.jpg 1600w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;色はNeoVimのOnedarkテーマに揃えた&lt;/p&gt;
+&lt;p&gt;i3blocksよりも色々設定できたり便利になってよかった、思ってたよりもメモリ消費量も変わらなかったしいい感じ&lt;/p&gt;
+&lt;h3&gt;ワークスペース&lt;/h3&gt;
+&lt;p&gt;左端にあるやつ、使用していないワークスペースも常に表示させておきたかったんだけど、そういうのは現状のi3wmでは無理なのかな？&lt;/p&gt;
+&lt;p&gt;”+“はワークスペースを一つ増やすボタン、使用していないワークスペースのうち最も若い番号のワークスペースに遷移する&lt;/p&gt;
+&lt;p&gt;Virtual Box起動させるとModキーが使用できなくなってワークスペース増やせないのが不便だったので作った&lt;/p&gt;
+&lt;p&gt;キーバインディングとしてはMod+HankakuZenkakuにしてある&lt;/p&gt;
+&lt;p&gt;あんま使わないかなーと思ってたけど、何番のワークスペースがあいているか確認してからワークスペース開いていた動作がなくなるのもあって結構よく使うようになった&lt;/p&gt;
+&lt;h3&gt;MPD&lt;/h3&gt;
+&lt;p&gt;音楽鳴らせますね&lt;/p&gt;
+&lt;p&gt;i3blockだとクリックの種類で再生だったり曲の遷移だったりを変えていたのが、Polybarだた各ボタンで操作可能なのが便利&lt;/p&gt;
+&lt;h3&gt;システムトレイ&lt;/h3&gt;
+&lt;p&gt;表示されるのは次の項目&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Bluetooth接続状態(接続時のみ表示)&lt;/li&gt;
+&lt;li&gt;アップデートの有無(アップデートがあるときだけ表示)&lt;/li&gt;
+&lt;li&gt;ネットワーク(有線or無線-SSID)&lt;/li&gt;
+&lt;li&gt;メモリ消費量&lt;/li&gt;
+&lt;li&gt;バッテリー&lt;/li&gt;
+&lt;li&gt;音量&lt;/li&gt;
+&lt;li&gt;時計&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;設定ファイル&lt;/h2&gt;
+&lt;h3&gt;launch.sh&lt;/h3&gt;
+&lt;p&gt;Polybar、Mod+Shift+rでi3wmを再読込するとワークスペースのモジュールが動作しなくなってしまうので、そのへんを考慮した&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;#!/bin/bash
+
+## restart i3
+if [[ $1 = &amp;quot;restart&amp;quot; ]]; then
+	i3-msg restart
+	sleep 1
+fi
+
+# Terminate already running bar instances
+killall -q polybar
+
+# Wait until the processes have been shut down
+while pgrep -u $UID -x polybar &amp;gt;/dev/null; do sleep 1; done
+
+# Launch bar
+polybar eDP1 &amp;amp;
+polybar HDMI1 &amp;amp;
+polybar DP2&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;引数に&lt;code class=&quot;language-text&quot;&gt;restart&lt;/code&gt;を書くとi3wmを再読込してからPolybarを再起動する&lt;/p&gt;
+&lt;h3&gt;config&lt;/h3&gt;
+&lt;p&gt;Polybarはもともとモジュールをいくつも持っていて、デフォルトだとそれらから構成されているんだけど、若干出力がクドかったり冗長だなと感じたのでi3blocksのときに作ったモジュールをほとんど流用した&lt;/p&gt;
+&lt;p&gt;カスタムモジュールを使うのも結構楽だったので、そのへんはWikiがちゃんと充実してるから見ながらやればだいたいできると思う&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;conf&quot;&gt;&lt;pre class=&quot;language-conf&quot;&gt;&lt;code class=&quot;language-conf&quot;&gt;[colors]
+mono0 = #282c34
+mono1 = #545862
+mono2 = #abb2bf
+mono3 = #c8ccd4
+mono4 = #353b45
+red = #e06c75
+green = #98c379
+yellow = #e5c07b
+blue = #61afef
+purple = #c678dd
+teal = #56b6c2
+
+[bar/eDP1]
+monitor = ${env:MONITOR:eDP1}
+bottom = true
+fixed-center = true
+
+width = 100%
+height = 25
+offset-x = 0%
+offset-y = 0%
+radius = 0.0
+
+background = ${colors.mono0}
+foreground = ${colors.green}
+
+line-size = 3
+line-color = #f00
+
+border-size = 0
+border-color = #00282c34
+
+padding-left = 0
+padding-right = 0
+
+module-margin-left = 0
+module-margin-right = 0
+
+font-0 = Source Han Code JP H:pixelsize=11;2
+font-1 = FontAwesome:pixelsize=12;3
+
+modules-left = i3 add_ws
+modules-center = ncmpcpp mpd
+modules-right = bluetooth update network memory battery volume date
+
+separator =
+dim-value = 1.0
+
+;tray-position = 
+;tray-padding = 0
+;tray-transparent = false
+;tray-background = ${root.background}
+
+;wm-restack = i3
+;override-redirect = true
+enable-ipc = true
+
+scroll-up = i3wm-wsnext
+scroll-down = i3wm-wsprev
+
+cursor-click = pointer
+cursor-scroll = default
+
+[bar/HDMI1]
+monitor = ${env:MONITOR:HDMI1}
+(略)
+
+[bar/DP2]
+monitor = ${env:MONITOR:DP2}
+(略)
+
+[module/i3]
+type = internal/i3
+format = &amp;lt;label-state&amp;gt; &amp;lt;label-mode&amp;gt;
+index-sort = true
+wrapping-scroll = false
+;label-mode-padding = 2
+;label-mode-foreground = #000
+;label-mode-background = ${colors.mono0}
+
+; focused = Active workspace on focused monitor
+label-focused = %index%
+label-focused-background = ${colors.green}
+label-focused-foreground = ${colors.mono0}
+label-focused-padding = 2
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %index%
+label-unfocused-background = ${colors.mono4}
+label-unfocused-foreground = ${colors.mono2}
+label-unfocused-padding = 2
+
+; visible = Active workspace on unfocused monitor
+label-visible = %index%
+label-visible-background = ${colors.mono4}
+label-visible-foreground = ${colors.mono2}
+label-visible-padding = 2
+
+; urgent = Workspace with urgency hint set
+label-urgent = %index%
+label-urgent-background = ${colors.red}
+label-urgent-foreground = ${colors.mono0}
+label-urgent-padding = 2
+
+[module/add_ws]
+type = custom/text
+content = 
+content-padding = 1
+content-background = ${colors.mono4}
+content-foreground = ${colors.mono2}
+click-left = exec ~/.config/polybar/scripts/add_ws.py
+
+[module/ncmpcpp]
+type = custom/text
+content = &amp;quot; &amp;quot;
+click-left = exec gnome-terminal -- ncmpcpp &amp;amp;
+click-right = exec gnome-terminal -- ncmpcpp &amp;amp;
+
+[module/mpd]
+type = internal/mpd
+format-online = &amp;lt;icon-prev&amp;gt; &amp;lt;icon-stop&amp;gt; &amp;lt;toggle&amp;gt; &amp;lt;icon-next&amp;gt; &amp;lt;label-song&amp;gt;
+
+icon-prev = 
+icon-stop = 
+icon-play = 
+icon-pause = 
+icon-next = 
+
+label-song-maxlen = 50
+label-song-ellipsis = true
+
+[module/bluetooth]
+type = custom/script
+exec = echo &amp;quot;%{F#98c379}&amp;quot;
+exec-if = echo info | bluetoothctl | grep &amp;#39;Device&amp;#39;
+interval = 10
+click-left = exec blueman-manager
+click-right = exec blueman-manager
+format-padding = 1
+format-background = ${colors.mono4}
+format-foreground = ${colors.mono2}
+
+[module/update]
+type = custom/script
+exec = echo &amp;quot;%{F#e5c07b} $(checkupdates | wc -l)&amp;quot;
+exec-if = checkupdates | grep &amp;#39;\-&amp;gt;&amp;#39;
+interval = 3600
+format-padding = 1
+format-background = ${colors.mono4}
+format-foreground = ${colors.mono2}
+
+[module/network]
+type = custom/script
+exec = ~/.config/polybar/scripts/network.sh
+interval = 10
+click-left = exec gnome-terminal -- nmtui &amp;amp;
+click-right = exec gnome-terminal -- nmtui &amp;amp;
+format-padding = 1
+format-background = ${colors.mono4}
+format-foreground = ${colors.mono2}
+
+[module/memory]
+type = custom/script
+exec = ~/.config/polybar/scripts/memory.sh
+interval = 10
+format-padding = 1
+format-background = ${colors.mono4}
+format-foreground = ${colors.mono2}
+
+[module/battery]
+type = custom/script
+exec = ~/.config/polybar/scripts/battery.sh
+interval = 20
+format-padding = 1
+format-background = ${colors.mono4}
+format-foreground = ${colors.mono2}
+
+[module/volume]
+type = custom/script
+exec = ~/.config/polybar/scripts/volume.sh
+click-left = exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+click-right = exec pavucontrol &amp;amp;
+interval = 1
+format-padding = 1
+format-background = ${colors.mono4}
+format-foreground = ${colors.mono2}
+
+[module/date]
+type = custom/script
+exec = date &amp;#39;+%H:%M&amp;#39;
+format-prefix = &amp;quot; &amp;quot;
+interval = 60
+format-background = ${colors.green}
+format-foreground = ${colors.mono0}
+format-padding = 1
+
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+
+[global/wm]
+margin-top = 5
+margin-bottom = 5
+
+; vim:ft=dosini&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Scripts&lt;/h3&gt;
+&lt;p&gt;i3blocksで使っていたのは省略して、新しく作ったのを紹介&lt;/p&gt;
+&lt;p&gt;ワークスペース増やすボタンのやつです、ほんとはシェルスクリプトで書ければよかったんだけどPythonで書くのが簡単そうだったので逃げた&lt;/p&gt;
+&lt;p&gt;i3wmにはPythonモジュールがあって結構いろいろ使うことができるみたい&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;#!/usr/bin/python&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; subprocess
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; i3
+
+max_ws &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;
+ws_list &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;x&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; x &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;11&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;# get a list of workspaces&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; workspace &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; i3&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get_workspaces&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token comment&quot;&gt;# get the workspace tree data&lt;/span&gt;
+    workspace_tree &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; i3&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;num&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;workspace&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;num&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    ws_list&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;workspace&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;get&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;num&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;for&lt;/span&gt; i &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt; ws_list&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; i&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt; max_ws &lt;span class=&quot;token keyword&quot;&gt;and&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;not&lt;/span&gt; i&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+        subprocess&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;run&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;i3-msg&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;workspace&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;i&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;break&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h2&gt;Reference&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/tonooo71/dotfiles/tree/master/.config/polybar&quot;&gt;GitHub-tonooo71:polybar&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Polybar導入するぞ]]></title><description><![CDATA[i3blockでも特に問題ないけど、これは格好良さの問題   Polybar インストール launch.sh(起動スクリプト)   設定ファイル colors bar xbacklight outputで輝度を制御するモニターを選択 formatで書式を選択、 Wiki]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180511_polybar/180511_polybar/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180511_polybar/180511_polybar/</guid><pubDate>Fri, 11 May 2018 04:50:38 GMT</pubDate><content:encoded>&lt;p&gt;i3blockでも特に問題ないけど、これは格好良さの問題  &lt;/p&gt;
+&lt;h2&gt;Polybar&lt;/h2&gt;
+&lt;h3&gt;インストール&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ yaourt -S polybar
+$ (略)
+$ install -Dm644 /usr/share/doc/polybar/config ~/.config/polybar
+$ touch ~/.config/polybar/launch.sh&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;launch.sh(起動スクリプト)  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token shebang important&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# Terminate already running bar instances&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;killall&lt;/span&gt; -q polybar
+
+&lt;span class=&quot;token comment&quot;&gt;# Wait until the processes have been shut down&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; pgrep -u &lt;span class=&quot;token environment constant&quot;&gt;$UID&lt;/span&gt; -x polybar &lt;span class=&quot;token operator&quot;&gt;&gt;&lt;/span&gt;/dev/null&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sleep&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;done&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;# Launch bar&lt;/span&gt;
+polybar statusbar &lt;span class=&quot;token operator&quot;&gt;&amp;amp;&lt;/span&gt;
+
+&lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;Bars launched...&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;設定ファイル&lt;/h3&gt;
+&lt;h4&gt;[colors]&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;ini&quot;&gt;&lt;pre class=&quot;language-ini&quot;&gt;&lt;code class=&quot;language-ini&quot;&gt;&lt;span class=&quot;token selector&quot;&gt;[colors]&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;background&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; #545862&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;forefround&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; #c8ccd4&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;[bar]&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;ini&quot;&gt;&lt;pre class=&quot;language-ini&quot;&gt;&lt;code class=&quot;language-ini&quot;&gt;&lt;span class=&quot;token selector&quot;&gt;[bar/statusbar]&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; 表示するモニタ&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;monitor&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; ${env:MONITOR:HDMI1}&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; 上記のモニターがない場合に表示するモニタ&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;monitor-fallback&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; eDP1&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; 下部に配置するか否か&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;bottom&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; false&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; ?&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;fixed-center&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; false&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; パーセント表示とピクセル表示を使用(併用)可能(50%:-10)&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;width&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 100%&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;height&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 25&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;offset-x&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 0&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;offset-y&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 0&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; 角を丸くする(0.0だと丸まらない)&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;radius&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 0.0&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; 色(argb color (e.g. #f00, #ff992a, #ddff1023))&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;background&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; #545862&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;foreground&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; #c8ccd4&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; 下部ライン&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;line-size&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 0&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;line-color&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; #f00&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; バーのボーダーライン&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;border-size&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 0&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;border-color&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; #00282c34&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; バーの左端と右端の空白&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;padding-left&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 0&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;padding-right&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 0&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; モジュールの左右の空白&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;module-margin-left&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 1&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;module-margin-right&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 1&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; フォント(font-x = &amp;lt;フォントネーム&gt;;&amp;lt;オフセット&gt;)&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;font-0&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; Source Han Code JP H:pixelsize=12;1&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;font-1&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; FontAwesome:pixelsize=12;0&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; モジュールの配置場所&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;modules-left&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; i3&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;modules-center&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; mpd&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;modules-right&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; filesystem xbacklight volume xkeyboard memory cpu battery temperature date powermen&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; セパレータ&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;separator&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; 不透明度(0.0~1.0)&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;dim-value&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 1.0&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; ?&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;;wm-name =&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; システムトレイ&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;tray-position&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;;tray-padding = 0&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;;tray-transparent = false&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;;tray-background = ${root.background}&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; polybarを隠す的な?&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;;wm-restack = i3&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;;override-redirect = true&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; 内部メッセージの表示?&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;enable-ipc&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; true&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; カーソル&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;scroll-up&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; i3wm-wsnext&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;scroll-down&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; i3wm-wsprev&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;; カーソルの動作の定義?&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;cursor-click&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; pointer&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;cursor-scroll&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; ns-resize&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;[xbacklight]&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;ini&quot;&gt;&lt;pre class=&quot;language-ini&quot;&gt;&lt;code class=&quot;language-ini&quot;&gt;&lt;span class=&quot;token selector&quot;&gt;[xbacklight]&lt;/span&gt;
+&lt;span class=&quot;token selector&quot;&gt;[module/xbacklight]&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; internal/xbacklight&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;output&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; eDP1&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;format&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &amp;lt;label&gt; &amp;lt;bar&gt;&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;label&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; BL&lt;/span&gt;
+
+&lt;span class=&quot;token constant&quot;&gt;bar-width&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 10&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;bar-indicator&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; |&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;bar-indicator-foreground&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; #ff&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;bar-indicator-font&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 2&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;bar-fill&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; ─&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;bar-fill-font&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 2&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;bar-fill-foreground&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; #9f78e1&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;bar-empty&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; ─&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;bar-empty-font&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; 2&lt;/span&gt;
+&lt;span class=&quot;token constant&quot;&gt;bar-empty-foreground&lt;/span&gt; &lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; ${colors.foreground-alt}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;outputで輝度を制御するモニターを選択&lt;br&gt;
+formatで書式を選択、&lt;label&gt;&lt;bar&gt;&lt;ramp&gt;&lt;br&gt;
+&lt;a href=&quot;https://github.com/jaagr/polybar/wiki/Module:-xbacklight&quot;&gt;Wiki&lt;/a&gt;  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[rootでvimを使う]]></title><description><![CDATA[root権限でvim使おうとすると、設定ファイルが読み込まれないんだね、知らんかった いくつか方法はあるみたいだけど、これが一番楽かな今んとこ   で環境変数を引き継いでくれるらしい(自分好みの環境をsudo…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180506_sudo_vim/180506_sudo_vim/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180506_sudo_vim/180506_sudo_vim/</guid><pubDate>Sun, 06 May 2018 08:57:13 GMT</pubDate><content:encoded>&lt;p&gt;root権限でvim使おうとすると、設定ファイルが読み込まれないんだね、知らんかった&lt;br&gt;
+いくつか方法はあるみたいだけど、これが一番楽かな今んとこ  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ sudo -E nvim&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;sudo -E&lt;/code&gt;で環境変数を引き継いでくれるらしい(&lt;a href=&quot;http://yudoufu.hatenablog.jp/entry/20110326/1301129885&quot;&gt;自分好みの環境をsudo時にも使えるようにする&lt;/a&gt;)&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;sudoedit&lt;/code&gt;使えみたいなこと書いてあるページもあったけど、まあこれでいいか&lt;/p&gt;</content:encoded></item><item><title><![CDATA[dotfilesを作成する]]></title><description><![CDATA[前々からi3関係のファイルだけGithubに上げていたけど、そろそろ他の設定ファイルも足してdotfilesとして上げたくなってきた dotfilesを作るにはフォルダを作って移動させてシンボリックリンク貼って…ってのが一般的みたいだけど、めんどくさかったので$HOME…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180506_dotfiles/180506_dotfiles/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180506_dotfiles/180506_dotfiles/</guid><pubDate>Sat, 05 May 2018 16:16:09 GMT</pubDate><content:encoded>&lt;p&gt;前々からi3関係のファイルだけGithubに上げていたけど、そろそろ他の設定ファイルも足してdotfilesとして上げたくなってきた&lt;br&gt;
+dotfilesを作るにはフォルダを作って移動させてシンボリックリンク貼って…ってのが一般的みたいだけど、めんどくさかったので$HOME以下をGitリポジトリにしてdotfilesにすることにした&lt;br&gt;
+(まあ$HOME全体ををGitで管理することはそうないだろうし…)  &lt;/p&gt;
+&lt;p&gt;まず.gitigoreを作成する&lt;br&gt;
+最初にすべてのファイルを除外して、それから追加したいファイルをホワイトリストに追加していく&lt;br&gt;
+このとき階層の深いファイルはうまい具合に書かないとホワイトリストに追加されないから注意  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;.gitignore&quot;&gt;&lt;pre class=&quot;language-.gitignore&quot;&gt;&lt;code class=&quot;language-.gitignore&quot;&gt;# ignore all files
+/*
+# add files
+!/.Xdefaults
+!/.bashrc
+!/.xprofile
+!/.config
+/.config/*
+!/.config/compton
+!/.config/i3
+!/.config/nvim
+!/.config/termite
+# delete files
+.netrwhist
+!.gitignore&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[ターミナルとNeovimの色設定]]></title><description><![CDATA[ターミナルはTermiteを使っていて、カラースキームはここに揃っていると書かれてあるのでここから拝借 base16のカラースキームの確認にはここが便利   Vimのカラースキームは無限にありそうだけど、ここが比較しやすいかな vim-airline用のはここで見れるけど、Vim…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180505_color_shell/180505_color_shell/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180505_color_shell/180505_color_shell/</guid><pubDate>Sat, 05 May 2018 13:45:18 GMT</pubDate><content:encoded>&lt;p&gt;ターミナルは&lt;a href=&quot;https://wiki.archlinux.jp/index.php/Termite&quot;&gt;Termite&lt;/a&gt;を使っていて、カラースキームは&lt;a href=&quot;https://github.com/khamer/base16-termite/tree/master/themes&quot;&gt;ここ&lt;/a&gt;に揃っていると書かれてあるのでここから拝借&lt;br&gt;
+base16のカラースキームの確認には&lt;a href=&quot;http://chriskempson.com/projects/base16/&quot;&gt;ここ&lt;/a&gt;が便利  &lt;/p&gt;
+&lt;p&gt;Vimのカラースキームは無限にありそうだけど、&lt;a href=&quot;http://colorswat.ch/vim/&quot;&gt;ここ&lt;/a&gt;が比較しやすいかな&lt;br&gt;
+vim-airline用のは&lt;a href=&quot;https://github.com/vim-airline/vim-airline/wiki/Screenshots&quot;&gt;ここ&lt;/a&gt;で見れるけど、Vimの方の設定で事足りた&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Neovim(3)]]></title><description><![CDATA[vim-airline 見た目を整理する。   vim-airlineとvim-airline-themesをインストール   Powerline仕様にする   タブ化   これタブ消せないんじゃ意味なくね…? というわけでvimのデフォルトタブ機能でいきます Git…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180504_neovim_3/180504_neovim_3/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180504_neovim_3/180504_neovim_3/</guid><pubDate>Thu, 03 May 2018 16:44:57 GMT</pubDate><content:encoded>&lt;h3&gt;vim-airline&lt;/h3&gt;
+&lt;p&gt;見た目を整理する。  &lt;/p&gt;
+&lt;p&gt;vim-airlineとvim-airline-themesをインストール  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;vim-airline/vim-airline&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;depends&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;vim-airline-themes&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;vim-airline/vim-airline-themes&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Powerline仕様にする  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;vim&quot;&gt;&lt;pre class=&quot;language-vim&quot;&gt;&lt;code class=&quot;language-vim&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;let&lt;/span&gt; g&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;airline_powerline_fonts &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;タブ化  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;vim&quot;&gt;&lt;pre class=&quot;language-vim&quot;&gt;&lt;code class=&quot;language-vim&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;let&lt;/span&gt; g&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;airline#extensions#&lt;span class=&quot;token builtin&quot;&gt;tabline&lt;/span&gt;#enabled &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;これタブ消せないんじゃ意味なくね…?&lt;br&gt;
+というわけでvimのデフォルトタブ機能でいきます&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;c&quot;&gt;&lt;pre class=&quot;language-c&quot;&gt;&lt;code class=&quot;language-c&quot;&gt;&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;tabnew         &lt;span class=&quot;token comment&quot;&gt;// new tab&lt;/span&gt;
+&lt;span class=&quot;token operator&quot;&gt;:&lt;/span&gt;tabe file      &lt;span class=&quot;token comment&quot;&gt;// new tab with file&lt;/span&gt;
+gt              &lt;span class=&quot;token comment&quot;&gt;// next tab&lt;/span&gt;
+gT              &lt;span class=&quot;token comment&quot;&gt;// previous tab&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Gitのステータスを表示&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;tpope/vim-fugitive&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;他にも色々キーマップできそうだけどこれはまた今度&lt;/p&gt;
+&lt;h3&gt;C/C++用の補完&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;zchee/deoplete-clang&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;on_ft&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;c&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;cpp&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;hook_source&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&apos;
+    let g:deoplete#sources#clang#libclang_path = &apos;/usr/lib/libclang.so&apos;
+    let g:deoplete#sources#clang#clang_header = &apos;/usr/lib/clang&apos;
+&apos;&apos;&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;deoplete-clangxってのもあるみたいだ  &lt;/p&gt;
+&lt;h3&gt;アイコン&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;ryanoasis/vim-devicons&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;ファイルエクスプローラ&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;scrooloose/nerdtree&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;hook_add&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&apos;
+    nnoremap &amp;lt;Space&gt;f :&amp;lt;C-u&gt;NERDTreeToggle&amp;lt;CR&gt;
+&apos;&apos;&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;完全にコピペだけど&lt;br&gt;
+vimのキーマップ方法はまたまとめる&lt;br&gt;
+Gitの変更情報を表示(いらないかも)&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Xuyuanp/nerdtree-git-plugin&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;depends&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;vim-fugitive&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;Gitの差分を表示&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;airblade/vim-gitgutter&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;QuickRun&lt;/h3&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;:QuickRun&lt;/code&gt;でファイルを実行できる&lt;br&gt;
+設定で色々便利にできるっぽい(&lt;a href=&quot;https://github.com/lighttiger2505/.dotfiles/blob/master/.vim/rc/dein_lazy.toml&quot;&gt;dein_lazy.toml&lt;/a&gt;と&lt;a href=&quot;https://github.com/lighttiger2505/.dotfiles/blob/master/.vim/rc/plugins/vimquickrun.rc.vim&quot;&gt;vimquickrun.rc.vim&lt;/a&gt;)&lt;br&gt;
+これも今度やろ  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;thinca/vim-quickrun&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;on_ft&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;python&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;sh&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;ALE&lt;/h3&gt;
+&lt;p&gt;Linter設定できた&lt;br&gt;
+pep8使えないからflake8になった  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;w0rp/ale&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;on_ft&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;python&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;hook_source&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&apos;
+    let g:ale_enabled = 1
+    let g:ale_sign_error = &apos;⨉&apos;
+    let g:ale_sign_warning = &apos;⚠&apos;
+    let g:ale_echo_msg_format = &apos;[%linter%] %s [%severity%]&apos;
+    let g:ale_sign_column_always = 1
+    let g:ale_lint_on_enter = 1
+    let g:ale_lint_on_save = 1
+    let g:ale_lint_on_text_changed = &apos;never&apos;
+    let g:ale_set_loclist = 0
+    let g:ale_set_quickfix = 0
+    let g:ale_open_list = 0
+    let g:ale_keep_list_window_open = 0
+    let g:ale_statusline_format = [&apos;%d Error&apos;, &apos;%d Warn&apos;, &apos;OK&apos;]
+    let g:ale_linters = {
+    \    &apos;python&apos;: [&apos;flake8&apos;,&apos;pylint&apos;],
+    \}
+    nmap &amp;lt;silent&gt; [a &amp;lt;Plug&gt;(ale_previous)
+    nmap &amp;lt;silent&gt; ]a &amp;lt;Plug&gt;(ale_next)
+&apos;&apos;&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;括弧自動閉じ&lt;/h3&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;cohama/lexima.vim&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;on_i&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;気になってるやつ&lt;/h3&gt;
+&lt;p&gt;Shougo/defx.nvim&lt;br&gt;
+Shougo/context_filetype.vim  &lt;/p&gt;
+&lt;h3&gt;とりあえずここまで&lt;/h3&gt;
+&lt;p&gt;めんどくさいから現時点での設定丸上げ&lt;br&gt;
+あとはキーコンフィグ覚えるだけやな…  &lt;/p&gt;
+&lt;p&gt;dein.toml&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Shougo/dein.vim&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; 
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Shougo/neosnippet.vim&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Shougo/neosnippet-snippets&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Shougo/deol.nvim&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;rev&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;a1b5108fd&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;lifepillar/vim-solarized8&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;vim-jp/vimdoc-ja&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;hook_add&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&apos;
+    set helplang=ja,en
+&apos;&apos;&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;vim-airline/vim-airline&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;depends&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;vim-airline-themes&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;hook_add&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&apos;
+    let g:airline_powerline_fonts = 1
+    let g:airline#extensions#tabline#enabled = 1
+    set laststatus=2
+    let g:airline#extensions#ale#enabled = 1
+    let g:airline#extensions#ale#error_symbol = &apos;E:&apos;
+    let g:airline#extensions#ale#warning_symbol = &apos;W:&apos;
+    let g:airline#extensions#hunks#enabled = 0
+&apos;&apos;&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;vim-airline/vim-airline-themes&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;tpope/vim-fugitive&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;ryanoasis/vim-devicons&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;scrooloose/nerdtree&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;hook_add&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&apos;
+    nnoremap &amp;lt;Space&gt;f :&amp;lt;C-u&gt;NERDTreeToggle&amp;lt;CR&gt;
+&apos;&apos;&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Xuyuanp/nerdtree-git-plugin&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;depends&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;vim-fugitive&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;airblade/vim-gitgutter&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;dein_lazy.toml&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Shougo/denite.nvim&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Shougo/deoplete.nvim&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;has(&quot;nvim&quot;)&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;on_i&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;hook_source&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&apos;
+    let g:deoplete#enable_at_startup = 1
+&apos;&apos;&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;hook_post_source&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&apos;
+    let g:deoplete#omni_patterns = {}
+&apos;&apos;&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;zchee/deoplete-jedi&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;on_ft&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;python&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;zchee/deoplete-clang&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;on_ft&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;c&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;cpp&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;hook_source&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&apos;
+    let g:deoplete#sources#clang#libclang_path = &apos;/usr/lib/libclang.so&apos;
+    let g:deoplete#sources#clang#clang_header = &apos;/usr/lib/clang&apos;
+&apos;&apos;&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;thinca/vim-quickrun&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;on_ft&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;python&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;sh&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;w0rp/ale&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;on_ft&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;python&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;hook_source&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;&apos;&apos;
+    let g:ale_enabled = 1
+    let g:ale_sign_error = &apos;⨉&apos;
+    let g:ale_sign_warning = &apos;⚠&apos;
+    let g:ale_echo_msg_format = &apos;[%linter%] %s [%severity%]&apos;
+    let g:ale_sign_column_always = 1
+    let g:ale_lint_on_enter = 1
+    let g:ale_lint_on_save = 1
+    let g:ale_lint_on_text_changed = &apos;never&apos;
+    let g:ale_set_loclist = 0
+    let g:ale_set_quickfix = 0
+    let g:ale_open_list = 0
+    let g:ale_keep_list_window_open = 0
+    let g:ale_statusline_format = [&apos;%d Error&apos;, &apos;%d Warn&apos;, &apos;OK&apos;]
+    let g:ale_linters = {
+    \    &apos;python&apos;: [&apos;flake8&apos;,&apos;pylint&apos;],
+    \}
+    nmap &amp;lt;silent&gt; [a &amp;lt;Plug&gt;(ale_previous)
+    nmap &amp;lt;silent&gt; ]a &amp;lt;Plug&gt;(ale_next)
+&apos;&apos;&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;cohama/lexima.vim&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;on_i&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;参考&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/lighttiger2505/items/e0ada17634516c081ee7&quot;&gt;NeovimでモダンなPython環境を構築する&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://original-game.com/vim-airline/&quot;&gt;vim-airlineの使い方と設定方法。Vimのステータスバーを最強に！&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://kannokanno.hatenablog.com/entry/2013/05/05/130219&quot;&gt;Vimのキーマッピング(:map)で使える表記&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://github.com/zchee/deoplete-clang&quot;&gt;deoplete-clang&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://noy.hatenablog.jp/entry/2017/11/26/140256#deopletenvim&quot;&gt;dein.vimとdeopleteをmacにインストールする。&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/musou1500/items/3f0b139d37d78a18786f&quot;&gt;deoplete-clangで快適C++エディット！！！&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content:encoded></item><item><title><![CDATA[Vivaldiまたインストールした]]></title><description><![CDATA[最近目的別にブラウザ使い分けるのが便利なんじゃないかと思い始めてFirefoxとChromiumとBrave使ってた (ChromiumとかChromeってGoogleアカウントと紐付けして同期できて便利)   Brave…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180502_vivaldi/180502_vivaldi/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180502_vivaldi/180502_vivaldi/</guid><pubDate>Wed, 02 May 2018 09:36:20 GMT</pubDate><content:encoded>&lt;p&gt;最近目的別にブラウザ使い分けるのが便利なんじゃないかと思い始めてFirefoxとChromiumとBrave使ってた&lt;br&gt;
+(ChromiumとかChromeってGoogleアカウントと紐付けして同期できて便利)  &lt;/p&gt;
+&lt;p&gt;Braveで特に問題なかったしこれでいいかなって感じだったんだけど、Linuxの言語設定を英語から日本語に変えたらフォントが等幅じゃなくなって、しかも変更できなくなってこれは…ってなったので再びVivaldiインストールした&lt;br&gt;
+たしかVivaldiってffmpeg-codecのインストール(アップデート)がすんごい時間かかってアンインストールした記憶あったけどどうだったかな、って感じだったんだけどそもそもインストールできないのが原因だったの思い出した  &lt;/p&gt;
+&lt;p&gt;というのもffmpeg-codecのインストールに必要なncurses5-compat-libsの鍵が無くてエラー吐いてしまうんだよね  &lt;/p&gt;
+&lt;p&gt;よく検索で、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ gpg --keyserver http://pgp.mit.edu --recv-keys 702353E0F7E48EDB&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;っていうのが引っかかるけど、これじゃ駄目なんで&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ gpg --keyserver keys.gnupg.net --recv-keys 702353E0F7E48EDB&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;こっちが正しいみたい(&lt;a href=&quot;http://grainrigi.hatenablog.com/entry/2017/12/04/215448&quot;&gt;stackのclockのビルドで大ハマリした話&lt;/a&gt;)  &lt;/p&gt;
+&lt;p&gt;これでエラーは吐かなくなってよかった(そしてやっぱりインストールに時間かかるな…)&lt;/p&gt;</content:encoded></item><item><title><![CDATA[MACアドレスの偽装]]></title><description><![CDATA[WiFiの物理MACアドレスがデュアルブートしているWindowsとLinuxで異なっているのに気づいた てかLinux…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180410_wifi_mac/180410_wifi_mac/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180410_wifi_mac/180410_wifi_mac/</guid><pubDate>Tue, 10 Apr 2018 11:37:31 GMT</pubDate><content:encoded>&lt;p&gt;WiFiの物理MACアドレスがデュアルブートしているWindowsとLinuxで異なっているのに気づいた&lt;br&gt;
+てかLinuxの方は起動するたびに変わってる気がする  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ ip link set dev wlp2s0 address XX:XX:XX:XX:XX:XX&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;これで偽装します  &lt;/p&gt;
+&lt;p&gt;動作確認はちょっとまた今度…  &lt;/p&gt;
+&lt;h3&gt;追記&lt;/h3&gt;
+&lt;p&gt;固定できてなかった&lt;br&gt;
+原因は&lt;a href=&quot;https://wiki.archlinux.jp/index.php/NetworkManager#MAC_.E3.82.A2.E3.83.89.E3.83.AC.E3.82.B9.E3.81.AE.E3.83.A9.E3.83.B3.E3.83.80.E3.83.A0.E5.8C.96.E3.81.AE.E8.A8.AD.E5.AE.9A&quot;&gt;これ&lt;/a&gt;のせいっぽかったので、Wikiの通りに追記したところもとに戻った。  &lt;/p&gt;
+&lt;p&gt;ついでにnetwork-manager-appletを削除して、nmtuiに変更することにした。&lt;br&gt;
+こっちだと接続先選べるしね。  &lt;/p&gt;
+&lt;h4&gt;リンク&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;https://wiki.archlinux.jp/index.php/MAC_%E3%82%A2%E3%83%89%E3%83%AC%E3%82%B9%E5%81%BD%E8%A3%85&quot;&gt;MAC アドレス偽装&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Google Driveとの同期]]></title><description><![CDATA[Google Driveとの同期クライアント、Dropboxとは違って公式でLinux版出してくれていないので
+サードパーティのを使うしかないのが手間がかかる。 今はCloudCross(1.4.1_rc3-1)を使っているけど、1回で全部同期できない(8~…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180218_sync_gdrive/180218_sync_gdrive/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180218_sync_gdrive/180218_sync_gdrive/</guid><pubDate>Sun, 18 Feb 2018 05:10:20 GMT</pubDate><content:encoded>&lt;p&gt;Google Driveとの同期クライアント、Dropboxとは違って公式でLinux版出してくれていないので
+サードパーティのを使うしかないのが手間がかかる。&lt;/p&gt;
+&lt;p&gt;今はCloudCross(1.4.1_rc3-1)を使っているけど、1回で全部同期できない(8~9割ぐらいしか同期されない)のがちょっと微妙だったので、&lt;a href=&quot;https://rclone.org/&quot;&gt;rclone&lt;/a&gt;を使ってみることにする。&lt;/p&gt;
+&lt;h4&gt;rcloneの初期設定&lt;/h4&gt;
+&lt;p&gt;rcloneはArch Linuxのリポジトリにあったのでpacmanでダウンロード＆インストール。&lt;/p&gt;
+&lt;p&gt;まずはストレージサービスごとに設定を行う。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ rclone config&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;すると、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;No remotes found - make a new one
+n) New remote
+s) Set configuration password
+q) Quit config
+n/s/q&amp;gt; n&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;となるので&lt;code class=&quot;language-text&quot;&gt;n&lt;/code&gt;を入力し、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;name&amp;gt; googledrive&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;で名前を設定する(識別名なので、何でもいい)。&lt;/p&gt;
+&lt;p&gt;するとストレージサービス一覧が表示されるので選択する。&lt;/p&gt;
+&lt;p&gt;ここからはGoogle Driveの場合を書く。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Google Application Client Id - leave blank normally.
+client_id&amp;gt; 
+Google Application Client Secret - leave blank normally.
+client_secret&amp;gt; 
+Service Account Credentials JSON file path - needed only if you want use SA instead of interactive login.
+service_account_file&amp;gt; 
+Remote config
+Use auto config?
+ * Say Y if not sure
+ * Say N if you are working on a remote or headless machine or Y didn&amp;#39;t work
+y) Yes
+n) No
+y/n&amp;gt; y&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;次に聞かれる3つは空欄でも問題ない(最後のはよくわからんけど)のでそのまま進み、“Use auto config”で&lt;code class=&quot;language-text&quot;&gt;y&lt;/code&gt;を押すとブラウザが立ち上がりアクセス権を取得しに行く。&lt;/p&gt;
+&lt;p&gt;なのでCUI環境の場合は&lt;code class=&quot;language-text&quot;&gt;n&lt;/code&gt;を選択する必要がある、たぶん。&lt;/p&gt;
+&lt;p&gt;最後に、&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;Configure this as a team drive?
+y) Yes
+n) No
+y/n&amp;gt; n&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;と聞かれるので個人用のGoogle Driveなら&lt;code class=&quot;language-text&quot;&gt;n&lt;/code&gt;を選択すると終了。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;--------------------
+[googledrive]
+client_id = 
+client_secret = 
+service_account_file = 
+token = {&amp;quot;access_token&amp;quot;:&amp;quot;nanntokakanntoka&amp;quot;,&amp;quot;token_type&amp;quot;:&amp;quot;Hoge&amp;quot;,&amp;quot;refresh_token&amp;quot;:&amp;quot;nannyakannya&amp;quot;,&amp;quot;expiry&amp;quot;:&amp;quot;2018-02-18T10:00:00.000000000+09:00&amp;quot;}
+--------------------
+y) Yes this is OK
+e) Edit this remote
+d) Delete this remote
+y/e/d&amp;gt; y&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;で設定終了。&lt;/p&gt;
+&lt;h4&gt;同期する&lt;/h4&gt;
+&lt;p&gt;rcloneにはいくつかコマンドがある(&lt;a href=&quot;https://rclone.org/docs/#subcommands&quot;&gt;リンク&lt;/a&gt;)が、まずGoogle Drive上のファイルをローカルに同期する。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ rclone sync googledrive: ./GoogleDrive&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;これで&lt;code class=&quot;language-text&quot;&gt;googledrive&lt;/code&gt;で登録したストレージサービスの全ファイルが&lt;code class=&quot;language-text&quot;&gt;./GoogleDrive&lt;/code&gt;に同期される。&lt;/p&gt;
+&lt;p&gt;自分の使い方だと、今後編集するファイルはDropboxに、編集頻度の低いファイルをGoogle Driveに保存しているので、これ以外のコマンドを使う予定は今の所あまりない。&lt;/p&gt;
+&lt;p&gt;CloudCrossと違ってちゃんと同期できているのかどうかは確認していないが、2回目以降の同期が比較的早く終了するのでできているような気がするけど…&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Neovim(2)]]></title><description><![CDATA[dein.vimの文法とかdenite.vimの設定とかちゃんと読まないと設定すら厳しい… Vimで始める型付きPython3開発 個人的NeoVim環境(Python編) Vim8とNeovimと私（Vim初心者) NeoBundle から dein.vim…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180210_neovim_2/180210_neovim_2/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180210_neovim_2/180210_neovim_2/</guid><pubDate>Sat, 10 Feb 2018 01:56:52 GMT</pubDate><content:encoded>&lt;p&gt;dein.vimの文法とかdenite.vimの設定とかちゃんと読まないと設定すら厳しい…&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://muunyblue.github.io/6afd3a1bbb557f8e05f45ded7bf96836.html&quot;&gt;Vimで始める型付きPython3開発&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://blog.515hikaru.net/entry/2017/06/25/043035&quot;&gt;個人的NeoVim環境(Python編)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/ksm240/items/5cd62fdd15d95d21d173&quot;&gt;Vim8とNeovimと私（Vim初心者)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/delphinus/items/00ff2c0ba972c6e41542&quot;&gt;NeoBundle から dein.vim に乗り換えたら爆速だった話&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/Ress/items/7e71e007cf8d41a07a1a&quot;&gt;NeoVim と dein.vim を使ってみる!&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/okamos/items/2259d5c770d51b88d75b&quot;&gt;NeoVim、そしてdein.vimへ&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://qiita.com/delphinus/items/cd221a450fd23506e81a&quot;&gt;[dein.vim] hook の便利な使い方&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4&gt;Pythonモジュール&lt;/h4&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ pip &lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt; --upgrade nvim&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;これでPython依存しているneovimプラグインが動作するらしい&lt;/p&gt;
+&lt;h4&gt;denite.vim&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;https://qiita.com/okamos/items/4e1665ecd416ef77df7c&quot;&gt;unite.vimより高速なdenite.nvimを使う&lt;/a&gt;&lt;br&gt;
+なんにも設定してないな…&lt;/p&gt;
+&lt;h4&gt;deoplite.vim&lt;/h4&gt;
+&lt;p&gt;補完&lt;br&gt;
+Python用は入れた&lt;/p&gt;
+&lt;h5&gt;deoplete-jedi&lt;/h5&gt;
+&lt;p&gt;python用補完&lt;/p&gt;
+&lt;h4&gt;vimdoc-ja&lt;/h4&gt;
+&lt;p&gt;日本語ヘルプ&lt;/p&gt;
+&lt;h3&gt;参考&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://qiita.com/lighttiger2505/items/e0ada17634516c081ee7&quot;&gt;NeovimでモダンなPython環境を構築する&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[mpd導入]]></title><description><![CDATA[音楽再生にcmusを使っていたけど、再生している間起動させておくのがちょっと邪魔だったのでmpdをインストールして試す。   インストールパッケージ mpd mpc ncmpc gnome-terminal mpcはmpdのコマンドライン操作ツール、ncmpcはncurse…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180202_mpd_1/180202_mpd_1/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180202_mpd_1/180202_mpd_1/</guid><pubDate>Fri, 02 Feb 2018 14:18:48 GMT</pubDate><content:encoded>&lt;p&gt;音楽再生にcmusを使っていたけど、再生している間起動させておくのがちょっと邪魔だったのでmpdをインストールして試す。  &lt;/p&gt;
+&lt;h4&gt;インストールパッケージ&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;mpd&lt;/li&gt;
+&lt;li&gt;mpc&lt;/li&gt;
+&lt;li&gt;ncmpc&lt;/li&gt;
+&lt;li&gt;gnome-terminal&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;mpcはmpdのコマンドライン操作ツール、ncmpcはncurseベースのCLIプレイヤー、そしてncmpcはフローティングで起動させようと思い、そのために別のターミナルが必要だったのでgnome-terminal、これらをインストールする。&lt;/p&gt;
+&lt;h5&gt;mpdの設定&lt;/h5&gt;
+&lt;p&gt;&lt;a href=&quot;https://wiki.archlinux.jp/index.php/Music_Player_Daemon#.E3.83.AD.E3.83.BC.E3.82.AB.E3.83.AB.E8.A8.AD.E5.AE.9A_.28.E3.83.A6.E3.83.BC.E3.82.B6.E3.83.BC.E3.81.94.E3.81.A8.29&quot;&gt;ArchWiki&lt;/a&gt;に則って設定を記述する。&lt;code class=&quot;language-text&quot;&gt;~/.config/mpd/mpd.conf&lt;/code&gt;に以下の項目も記述。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;bind_to_address	    &amp;quot;127.0.0.1&amp;quot;
+port                &amp;quot;6600&amp;quot;
+auto_update         &amp;quot;yes&amp;quot;
+audio_output {
+    type            &amp;quot;pulse&amp;quot;
+    name            &amp;quot;MPD&amp;quot;
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;そしてmpdのサービスファイルを起動時に立ち上げる。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ systemctl --user enable mpd&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;i3blocksのモジュール&lt;/h4&gt;
+&lt;p&gt;cmus用のモジュールを流用して書き換え。&lt;br&gt;
+左クリックで再生/停止、右クリックでncmpcを起動。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token shebang important&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;mpc  &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;wc&lt;/span&gt; -l&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt; -eq &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+    &lt;span class=&quot;token assign-left variable&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[stopped]&quot;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;mpc &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;wc&lt;/span&gt; -l&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt; -ge &lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+    &lt;span class=&quot;token assign-left variable&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;mpc &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sed&lt;/span&gt; -n 2P &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;awk&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;{print &lt;span class=&quot;token variable&quot;&gt;$1&lt;/span&gt;}&apos;&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=&quot;token assign-left variable&quot;&gt;music&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;mpc -f &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;%title%/%artist%&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;sed&lt;/span&gt; -n 1P&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$status&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[paused]&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$BLOCK_BUTTON&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt;
+        &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; mpc -q play &lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; gnome-terminal -- ncmpc &lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;esac&lt;/span&gt;
+    &lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;     &lt;span class=&quot;token variable&quot;&gt;$music&lt;/span&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;     &lt;span class=&quot;token variable&quot;&gt;$music&lt;/span&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$status&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[playing]&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$BLOCK_BUTTON&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt;
+        &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; mpc -q pause &lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; gnome-terminal -- ncmpc &lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;esac&lt;/span&gt;
+    &lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;     &lt;span class=&quot;token variable&quot;&gt;$music&lt;/span&gt;&quot;&lt;/span&gt;
+    &lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;     &lt;span class=&quot;token variable&quot;&gt;$music&lt;/span&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;elif&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$status&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;[stopped]&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$BLOCK_BUTTON&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;in&lt;/span&gt;
+        &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; mpc -q play &lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;token number&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; gnome-terminal -- ncmpc &lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;esac&lt;/span&gt;
+    &lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;  -/-&quot;&lt;/span&gt;
+    &lt;span class=&quot;token builtin class-name&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;  -/-&quot;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4&gt;うん&lt;/h4&gt;
+&lt;p&gt;いいかんじ。&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Neovim(1)]]></title><description><![CDATA[そろそろvimを使ってみるかと思ったがせっかくなのでneovimを使ってみる。(普段はnano)   まずプラグインマネージャdein.vimを導入する。 これによってプラグインを(自動で)インストールして管理してくれるようだ。   ~/.config/nvim/init.vim…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180130_neovim_1/180130_neovim_1/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180130_neovim_1/180130_neovim_1/</guid><pubDate>Tue, 30 Jan 2018 08:59:01 GMT</pubDate><content:encoded>&lt;p&gt;そろそろvimを使ってみるかと思ったがせっかくなのでneovimを使ってみる。(普段はnano)  &lt;/p&gt;
+&lt;p&gt;まずプラグインマネージャdein.vimを導入する。&lt;br&gt;
+これによってプラグインを(自動で)インストールして管理してくれるようだ。  &lt;/p&gt;
+&lt;p&gt;~/.config/nvim/init.vim  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;vim&quot;&gt;&lt;pre class=&quot;language-vim&quot;&gt;&lt;code class=&quot;language-vim&quot;&gt;&lt;span class=&quot;token comment&quot;&gt;&quot;dein Scripts-----------------------------&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &amp;amp;&lt;span class=&quot;token builtin&quot;&gt;compatible&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;nocompatible&lt;/span&gt;               &lt;span class=&quot;token comment&quot;&gt;&quot; Be iMproved&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;endif&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;&quot; Required:&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;runtimepath&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;+=&lt;/span&gt;$HOME&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;cache&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;dein&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;repos&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;github&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token builtin&quot;&gt;com&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;Shougo&lt;span class=&quot;token operator&quot;&gt;/&lt;/span&gt;dein&lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;token keyword&quot;&gt;vim&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;&quot; Required:&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; dein#&lt;span class=&quot;token function&quot;&gt;load_state&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;$HOME/.cache/dein/&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;call&lt;/span&gt; dein#&lt;span class=&quot;token function&quot;&gt;begin&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;$HOME/.cache/dein/&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;token keyword&quot;&gt;let&lt;/span&gt; s&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;toml_dir &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;expand&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;$HOME/.config/nvim&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;token comment&quot;&gt;&quot; デフォルトでロードするプラグイン&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;call&lt;/span&gt; dein#&lt;span class=&quot;token function&quot;&gt;load_toml&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;s&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;toml_dir &lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;/dein.toml&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;lazy&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token comment&quot;&gt;&quot; 特別な場合にロードするプラグイン&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;call&lt;/span&gt; dein#&lt;span class=&quot;token function&quot;&gt;load_toml&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;s&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;toml_dir &lt;span class=&quot;token operator&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;/dein_lazy.toml&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;lazy&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;  
+
+  &lt;span class=&quot;token comment&quot;&gt;&quot; Required:&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;call&lt;/span&gt; dein#&lt;span class=&quot;token function&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;call&lt;/span&gt; dein#&lt;span class=&quot;token function&quot;&gt;save_state&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;endif&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;&quot; Required:&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;filetype&lt;/span&gt; plugin indent &lt;span class=&quot;token keyword&quot;&gt;on&lt;/span&gt;
+&lt;span class=&quot;token builtin&quot;&gt;syntax&lt;/span&gt; enable
+
+&lt;span class=&quot;token comment&quot;&gt;&quot; If you want to install not installed plugins on startup.&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; dein#&lt;span class=&quot;token function&quot;&gt;check_install&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;call&lt;/span&gt; dein#&lt;span class=&quot;token function&quot;&gt;install&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;endif&lt;/span&gt;
+&lt;span class=&quot;token comment&quot;&gt;&quot;End dein Scripts-----------------------------&lt;/span&gt;
+
+&lt;span class=&quot;token comment&quot;&gt;&quot;その他の設定&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;number&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt; termguicolors
+&lt;span class=&quot;token keyword&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;background&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;light
+&lt;span class=&quot;token keyword&quot;&gt;colorscheme&lt;/span&gt; solarized8_flat&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;set number&lt;/code&gt;: 行番号を表示  &lt;/li&gt;
+&lt;li&gt;&lt;code class=&quot;language-text&quot;&gt;set termguicolors&lt;/code&gt;: Truecolor&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;カラーテーマとしてsolarized lightのTruecolor対応している&lt;a href=&quot;https://github.com/lifepillar/vim-solarized8&quot;&gt;solarized8&lt;/a&gt;を使用する(が、まだシンタックスを設定してないのでよくわからない)  &lt;/p&gt;
+&lt;p&gt;~/.config/nvim/deim.toml  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Shougo/dein.vim&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt; 
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Shougo/neosnippet.vim&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Shougo/neosnippet-snippets&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;Shougo/deol.nvim&apos;&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;rev&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;a1b5108fd&apos;&lt;/span&gt;
+
+&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;plugins&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;token key property&quot;&gt;repo&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;lifepillar/vim-solarized8&apos;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;とりあえずここまで&lt;/p&gt;
+&lt;h4&gt;参考&lt;/h4&gt;
+&lt;p&gt;&lt;a href=&quot;https://qiita.com/delphinus/items/00ff2c0ba972c6e41542&quot;&gt;NeoBundle から dein.vim に乗り換えたら爆速だった話&lt;/a&gt;&lt;br&gt;
+&lt;a href=&quot;https://qiita.com/sugamondo/items/fcaf210ca86d65bcaca8&quot;&gt;dein.vimでプラグイン管理のはじめ方&lt;/a&gt;&lt;br&gt;
+&lt;a href=&quot;https://qiita.com/tomatomus/items/171dd5aaf0bb8f11ec60&quot;&gt;【厳選】形から入る人のための  こだわり Vim / NeoVim カラースキーマ まとめ&lt;/a&gt;  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[Github.ioのセットアップ]]></title><description><![CDATA[Hugoフレームワークを用いてGitHub.io上にページを新規作成した。 テーマはMinimoを使用する。本当はHugo NuoとかMinimalにしようと思ってたけど、前者はCSS…]]></description><link>https://gatsby-starter-blog-demo.netlify.com/2018/180129_githubio_setup/180129_githubio_setup/</link><guid isPermaLink="false">https://gatsby-starter-blog-demo.netlify.com/2018/180129_githubio_setup/180129_githubio_setup/</guid><pubDate>Mon, 29 Jan 2018 11:51:53 GMT</pubDate><content:encoded>&lt;p&gt;Hugoフレームワークを用いてGitHub.io上にページを新規作成した。&lt;br&gt;
+テーマは&lt;a href=&quot;https://themes.gohugo.io/minimo/&quot;&gt;Minimo&lt;/a&gt;を使用する。本当は&lt;a href=&quot;https://themes.gohugo.io/hugo-nuo/&quot;&gt;Hugo Nuo&lt;/a&gt;とか&lt;a href=&quot;https://themes.gohugo.io/minimal/&quot;&gt;Minimal&lt;/a&gt;にしようと思ってたけど、前者はCSSが全く適用されないし後者は一部適用されないしで死んだので…  &lt;/p&gt;
+&lt;p&gt;とりあえずやったこと  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;DISQUSを利用することでコメント機能が設置できるみたいなので設置&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;タグから遷移するページがおかしかったので、テーマに含まれる./theme/minimo/layouts/partials/entry/taxonomy-list.htmlを変更  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;html&quot;&gt;&lt;pre class=&quot;language-html&quot;&gt;&lt;code class=&quot;language-html&quot;&gt;  #before
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;a&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&apos;&lt;/span&gt;{{ $tx }}&lt;span class=&quot;token punctuation&quot;&gt;&apos;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&apos;&lt;/span&gt;{{ $.LanguagePrefix }}/{{$txs }}/{{ $term | urlize }}&lt;span class=&quot;token punctuation&quot;&gt;&apos;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;
+  #after
+  &lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token tag&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;&amp;lt;&lt;/span&gt;a&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&apos;&lt;/span&gt;{{ $tx }}&lt;span class=&quot;token punctuation&quot;&gt;&apos;&lt;/span&gt;&lt;/span&gt; &lt;span class=&quot;token attr-name&quot;&gt;href&lt;/span&gt;&lt;span class=&quot;token attr-value&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&apos;&lt;/span&gt;{{ &quot;&quot; | absLangURL }}{{ $txs }}/{{ $term | urlize }}&lt;span class=&quot;token punctuation&quot;&gt;&apos;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;$.LanguagePrefixが指している場所がtonooo71.github.io/でこのブログのリポジトリであるtonooo71.github.io/blogを指していないみたい&lt;br&gt;
+たぶんdocsフォルダを使ってページ公開してるからこうなったっぽい  &lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3&gt;追記&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&quot;https://chanmitsu55.github.io/2017/12/25/2017-12-25-create-blog-by-hugo/&quot;&gt;ここ&lt;/a&gt;を参考にさせていただいて新しく作り直しました&lt;/p&gt;</content:encoded></item></channel></rss>
