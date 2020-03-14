@@ -1,4 +1,130 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://tonooo71.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 14 Mar 2020 05:07:51 GMT</lastBuildDate><item><title><![CDATA[React+Hookで作るメニュー外クリックで閉じるドロップダウンメニュー]]></title><description><![CDATA[はじめに これまでドロップダウンメニューが必要な時はReact Bootstrap…]]></description><link>https://tonooo71.github.io/2020/200301_reacthooks-dropdownmenu/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200301_reacthooks-dropdownmenu/</guid><pubDate>Sun, 01 Mar 2020 21:38:23 GMT</pubDate><content:encoded>&lt;h2&gt;はじめに&lt;/h2&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://tonooo71.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 14 Mar 2020 06:42:00 GMT</lastBuildDate><item><title><![CDATA[Gatsbyの導入]]></title><description><![CDATA[このブログはもともと静的サイトジェネレータのHugoを用いて生成したページをGitHub Pagesを利用して公開していたのですが、
+2020年になって久しぶりに更新しようかなと思ったところ、すっかりHugo…]]></description><link>https://tonooo71.github.io/2020/200314_introduce_gatsby/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200314_introduce_gatsby/</guid><pubDate>Tue, 10 Mar 2020 14:33:53 GMT</pubDate><content:encoded>&lt;p&gt;このブログはもともと静的サイトジェネレータのHugoを用いて生成したページをGitHub Pagesを利用して公開していたのですが、
+2020年になって久しぶりに更新しようかなと思ったところ、すっかりHugoの使い方を忘れてしまっていました。&lt;br&gt;
+そういう理由に加え、また仕事柄Reactを使用するようになったこともあり、せっかくなら新しい静的サイトジェネレータに移行しようかなと思った次第です。  &lt;/p&gt;
+&lt;h2&gt;Gatsbyとは&lt;/h2&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 590px;&quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/580269e30dd10d18bd6fac53dbde498f/c549b/gatsby_icon.png&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 42.10526315789473%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAICAIAAAB2/0i6AAAACXBIWXMAAAsSAAALEgHS3X78AAABG0lEQVQY03VQTUuEUBT1V7YNEgQRceG2RRjVWsxhsqIw20WaCLUIp0UJRhZt7AMKCwYHxBbjC0fe800vnTEx5iwe57577r2HQ00rYIyneE4W4H+LahgsUA4mHR2eo/3flFTNRp/puX5ztnN1P3iqG3EcAwDa0jRNEULdyyUqL468Lfpgdam3sbIfv30FD3eSJDmOkyRJGIamaZJJVVWDIMiyjHAI4Ww4/y5Oe+7J9uX68u7emjl8SXXj0DCORVHkOI5hGJqmeZ5nWZZwQRBkWa4dzWw/Xr9a/YG+6Zh9F07QOBtrmuZ5nuu6tm2T48SFZVmkVBTF9/1fv2X5F9jHcxzevuegqLYuDDyKotpzK23cFZFsygo1ad52+D+IualjDRv2twAAAABJRU5ErkJggg==&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;GatsbyIcon&quot;
+        title=&quot;GatsbyIcon&quot;
+        src=&quot;/static/580269e30dd10d18bd6fac53dbde498f/fcda8/gatsby_icon.png&quot;
+        srcset=&quot;/static/580269e30dd10d18bd6fac53dbde498f/12f09/gatsby_icon.png 148w,
+/static/580269e30dd10d18bd6fac53dbde498f/e4a3f/gatsby_icon.png 295w,
+/static/580269e30dd10d18bd6fac53dbde498f/fcda8/gatsby_icon.png 590w,
+/static/580269e30dd10d18bd6fac53dbde498f/efc66/gatsby_icon.png 885w,
+/static/580269e30dd10d18bd6fac53dbde498f/c83ae/gatsby_icon.png 1180w,
+/static/580269e30dd10d18bd6fac53dbde498f/c549b/gatsby_icon.png 2128w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;GatsbyはReactをベースにした静的サイトジェネレータです。&lt;br&gt;
+静的サイトジェネレータという名の通り、事前にビルドを行うことによりhtmlファイルとjavascriptファイルを生成します。&lt;br&gt;
+通常のReactも同じようにビルドしているじゃないかと思ったのですが、Reactではよくバンドルされたjavascriptファイル(とcssファイル)が生成されるのに対し、Gatsbyは基本的にhtmlファイルを生成します。&lt;br&gt;
+ここが静的サイトジェネレータと言われる所以だと思います。&lt;br&gt;
+一方Reactをベースにしているので、記述方法はjsxですし、なんならjavascriptでロジックを書くことも可能です。  &lt;/p&gt;
+&lt;h2&gt;じゃあGatsbyの利点って?&lt;/h2&gt;
+&lt;p&gt;ReactによるSPA(Single Page Application)に比べて何がいいの?という疑問に対しては、SPAでごりごりロジックを入れたページを作りたいのでなければ圧倒的に速度が出るというのが静的サイトジェネレータであるGatsbyの利点かなと思います。&lt;br&gt;
+(このブログもやろうと思えばReactとReact-Routerを使ってSPAで作れなくもないですが…)&lt;br&gt;
+また、Gatsbyが用意しているLinkコンポーネントを利用することで、ページ内にリンクがあればプリフェッチしてくれるので高速にリンク先に遷移できることもメリットです。  &lt;/p&gt;
+&lt;h2&gt;HugoからGatsbyへの移行&lt;/h2&gt;
+&lt;h3&gt;スターターセットを用いたGatsbyの導入&lt;/h3&gt;
+&lt;p&gt;本題に入ります。&lt;br&gt;
+Gatsbyの導入方法はいろいろありますが、自分はもともとHugoを使っていた際に記事をMarkdownファイルとして書いていたこともあり、Markdownファイルを殆どそのまま流用できる&lt;a href=&quot;https://www.gatsbyjs.org/starters/gatsbyjs/gatsby-starter-blog/&quot;&gt;gatsby-starter-blog&lt;/a&gt;というスターターセットを利用して導入しました。&lt;br&gt;
+スターターセットとは、言わば予め必要そうなモジュールの導入や設定が施されたテンプレートのようなものです。
+上記のgatsby-starter-blogはその名の通り、ブログ向けのスターターセットになります。  &lt;/p&gt;
+&lt;p&gt;まずターミナルで以下のコマンドを打ちます。(hogehogeはGatsbyにより構築されるファイル群が含まれるフォルダ名となります)  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;gatsby new hogehoge https://github.com/gatsbyjs/gatsby-starter-blog&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;次に&lt;code class=&quot;language-text&quot;&gt;hogehoge&lt;/code&gt;に移動して、&lt;code class=&quot;language-text&quot;&gt;gatsby develop&lt;/code&gt;を実行します。&lt;br&gt;
+そしてlocalhost:8000に移動すると、初期ページが表示されるはずです。  &lt;/p&gt;
+&lt;h3&gt;Gatsbyのフォルダ構造&lt;/h3&gt;
+&lt;p&gt;gatsby-starter-blogにより導入したGatsbyのフォルダ内の構造について見ていきます。  &lt;/p&gt;
+&lt;h4&gt;&lt;code class=&quot;language-text&quot;&gt;content&lt;/code&gt;フォルダ&lt;/h4&gt;
+&lt;p&gt;ここには、サイト全体のリソースファイル(画像とか)がある&lt;code class=&quot;language-text&quot;&gt;assets&lt;/code&gt;フォルダと、Markdownで書かれたブログの記事が配置される&lt;code class=&quot;language-text&quot;&gt;blog&lt;/code&gt;フォルダがあります。&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;blog&lt;/code&gt;フォルダ以下にMarkdownで記事を書き保存することで、ビルド時にgatsby-source-filesystemプラグインによりデータベース化され、それをもとにhtmlファイルが生成されます。&lt;br&gt;
+因みに&lt;code class=&quot;language-text&quot;&gt;blog&lt;/code&gt;フォルダ以下のツリー構造はそのままサイトのURLに反映されます。&lt;br&gt;
+例えばこの記事のURLは&lt;code class=&quot;language-text&quot;&gt;https://tonooo71.github.io/2020/200314_introduce_gatsby/&lt;/code&gt;ですが、記事自体は&lt;code class=&quot;language-text&quot;&gt;blog/2020/200314_introduce_gatsby/&lt;/code&gt;フォルダ内にあるindex.mdとgatsby_icon.pngから構成されています。&lt;br&gt;
+どのフォルダをコンテンツのソースとするかは&lt;code class=&quot;language-text&quot;&gt;gatsby-config.js&lt;/code&gt;に書かれてあるので、他にコンテンツソースフォルダを作りたいとなったときはここを編集する必要があります。&lt;br&gt;
+もともとサンプルの記事があるので、Hugoで書いていたMarkdownファイルもそれを参考に少し書き換えました。&lt;br&gt;
+とは言っても最初に書くメタデータの書式以外は同じMarkdownファイルなので、殆どそのまま利用できるのではないかと思います。  &lt;/p&gt;
+&lt;h4&gt;&lt;code class=&quot;language-text&quot;&gt;public&lt;/code&gt;フォルダ&lt;/h4&gt;
+&lt;p&gt;このフォルダは&lt;code class=&quot;language-text&quot;&gt;yarn build&lt;/code&gt;でビルドした際に生成されるサイトのソースが保存されます。&lt;br&gt;
+このフォルダ内のものをサーバーにアップロードする必要があります。  &lt;/p&gt;
+&lt;h4&gt;&lt;code class=&quot;language-text&quot;&gt;src&lt;/code&gt;フォルダ&lt;/h4&gt;
+&lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;components&lt;/code&gt;フォルダには、ウェブサイト共通のページの外観(layout.js)や記事一覧ページなどに表示されるブログ記事へのリンク要素(page.js)、著者を表示する要素(bio.js)などが書かれたReactコンポーネントが保存されています。&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;pages&lt;/code&gt;フォルダには、トップページの外観(index.js)や404ページの外観(404.js)が書かれたReactコンポーネントがあります。&lt;br&gt;
+&lt;code class=&quot;language-text&quot;&gt;templates&lt;/code&gt;フォルダには、ブログ記事ページのテンプレートとなるblog-post.jsがあり、ここにデータベースから記事の内容を流し込むことでHTML化された記事ページが生成されます。&lt;br&gt;
+いずれもJSXファイルなので、Reactに慣れている人であれば理解しやすいとは思います。  &lt;/p&gt;
+&lt;h4&gt;その他&lt;/h4&gt;
+&lt;p&gt;rootディレクトリ内のgatsby-browser.jsやgatsby-config.js、gatsby-node.jsはプラグインの導入やページの生成の際に変更するものです。&lt;br&gt;
+後々機能を追加していったりする際には編集必須です。(未だに全部はよくわかっていないのですが)&lt;/p&gt;
+&lt;h3&gt;スクリプト&lt;/h3&gt;
+&lt;p&gt;Hugoはデフォルトでデプロイのためのスクリプトが用意されていたように思いますが、Gatsbyには予め用意されていないので作成してみました。  &lt;/p&gt;
+&lt;p&gt;以下は、ビルドを行い&lt;code class=&quot;language-text&quot;&gt;public&lt;/code&gt;フォルダ内のファイルをgithubioフォルダにコピーし、リモートリポジトリoriginに対しpushするスクリプトです。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token shebang important&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+&lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; clean
+&lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; build
+
+&lt;span class=&quot;token function&quot;&gt;cp&lt;/span&gt; -r public/* &lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;/githubio/
+
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt;
+
+&lt;span class=&quot;token assign-left variable&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;rebuilding site &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;`&lt;/span&gt;&lt;/span&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$#&lt;/span&gt; -eq &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt; &lt;span class=&quot;token assign-left variable&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$1&lt;/span&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$msg&lt;/span&gt;&quot;&lt;/span&gt;
+
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push origin master
+
+&lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;/githubio
+
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$msg&lt;/span&gt;&quot;&lt;/span&gt;
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push origin master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;他にも、新規記事を作成するスクリプトなんかも作っておけば便利かもしれません。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;python&quot;&gt;&lt;pre class=&quot;language-python&quot;&gt;&lt;code class=&quot;language-python&quot;&gt;&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; datetime
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; os
+&lt;span class=&quot;token keyword&quot;&gt;import&lt;/span&gt; sys
+
+
+&lt;span class=&quot;token keyword&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;new_blog&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;title&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    now &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; datetime&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;datetime&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;now&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    year &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;now&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;year&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;
+    month &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;now&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;month&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;zfill&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    day &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;now&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;day&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;zfill&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    os&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;mkdir&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;./content/blog/&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;year&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;year&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token format-spec&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;month&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;day&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;title&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;./content/blog/&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;year&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;year&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;token format-spec&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;month&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;day&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;title&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;/index.md&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;w&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;as&lt;/span&gt; lines&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+        lines&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;write&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;---\n&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        lines&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;write&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;title: \n&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        lines&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;write&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string-interpolation&quot;&gt;&lt;span class=&quot;token string&quot;&gt;f&quot;date: &lt;/span&gt;&lt;span class=&quot;token interpolation&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;{&lt;/span&gt;now&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;isoformat&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;}&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;\n&quot;&lt;/span&gt;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        lines&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;write&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;description: \n&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        lines&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;write&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;---\n&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+        lines&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;write&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;\n&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; __name__ &lt;span class=&quot;token operator&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;__main__&quot;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;:&lt;/span&gt;
+    new_blog&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;sys&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;argv&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h3&gt;終わりに&lt;/h3&gt;
+&lt;p&gt;今回の記事は以上です。&lt;br&gt;
+次はデフォルトではブログとしては少し機能不足なので、そのあたりについてかいていければと思います。  &lt;/p&gt;</content:encoded></item><item><title><![CDATA[React+Hookで作るメニュー外クリックで閉じるドロップダウンメニュー]]></title><description><![CDATA[はじめに これまでドロップダウンメニューが必要な時はReact Bootstrap…]]></description><link>https://tonooo71.github.io/2020/200301_reacthooks-dropdownmenu/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200301_reacthooks-dropdownmenu/</guid><pubDate>Sun, 01 Mar 2020 21:38:23 GMT</pubDate><content:encoded>&lt;h2&gt;はじめに&lt;/h2&gt;
 &lt;p&gt;これまでドロップダウンメニューが必要な時はReact Bootstrapを用いていたのですが、自力でドロップダウンメニューを作る必要があったので、そのときの試行錯誤をメモとして残します。
 ドロップダウンメニューが満たしてほしい仕様は以下の通りです。&lt;/p&gt;
 &lt;ol&gt;
@@ -605,7 +731,7 @@ python-setuptools: /usr/lib/python3.7/site-packages/easy_install.py exists in fi
 &lt;/blockquote&gt;
 &lt;p&gt;ヒントを表示するなにかみたいだが、よく読むとPython 3.5以降では組み込まれているから必要ないよ、Python 3.7だと標準の機能としてビルトインされてるよ、みたいに書いてある&lt;br&gt;
 じゃあなおさらなんでインストールされているのか…&lt;/p&gt;
-&lt;p&gt;実際pipでバージョン管理するにはひと手間かかるし、pacmanやyayで管理ができるのは手間がかからなくて助かる感はある&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Hugoの設定する!]]></title><description><![CDATA[ちょっと時間ができたのでHugoの設定をば…   Permalinks Configuration  今までは記事の場所が、 だったのを、 みたいに年、月の階層構造になるようにした 使える変数はここで   Sitemap SitemapをGoogle…]]></description><link>https://tonooo71.github.io/2018/180831_hugosetting/180831_hugosetting/</link><guid isPermaLink="false">https://tonooo71.github.io/2018/180831_hugosetting/180831_hugosetting/</guid><pubDate>Fri, 31 Aug 2018 12:58:31 GMT</pubDate><content:encoded>&lt;p&gt;ちょっと時間ができたのでHugoの設定をば…  &lt;/p&gt;
+&lt;p&gt;実際pipでバージョン管理するにはひと手間かかるし、pacmanやyayで管理ができるのは手間がかからなくて助かる感はある&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Hugoの設定]]></title><description><![CDATA[ちょっと時間ができたのでHugoの設定します   Permalinks Configuration  今までは記事の場所が、 だったのを、 みたいに年、月の階層構造になるようにした 使える変数はここで   Sitemap SitemapをGoogle…]]></description><link>https://tonooo71.github.io/2018/180831_hugosetting/180831_hugosetting/</link><guid isPermaLink="false">https://tonooo71.github.io/2018/180831_hugosetting/180831_hugosetting/</guid><pubDate>Fri, 31 Aug 2018 12:58:31 GMT</pubDate><content:encoded>&lt;p&gt;ちょっと時間ができたのでHugoの設定します  &lt;/p&gt;
 &lt;h3&gt;Permalinks Configuration&lt;/h3&gt;
 &lt;p&gt;&lt;code class=&quot;language-text&quot;&gt;config.toml&lt;/code&gt;&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;toml&quot;&gt;&lt;pre class=&quot;language-toml&quot;&gt;&lt;code class=&quot;language-toml&quot;&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token table class-name&quot;&gt;permalinks&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;
@@ -785,7 +911,7 @@ Udisksっぽいんだけど、結局Nautilusで解決してしまった&lt;/p&gt
 	&lt;span class=&quot;token assign-left variable&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;$1&lt;/span&gt;
 	enscript --highlight&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;cpp --color -C -H1 &lt;span class=&quot;token variable&quot;&gt;$filename&lt;/span&gt; -o &lt;span class=&quot;token variable&quot;&gt;$filename&lt;/span&gt;.ps
 	ps2pdf &lt;span class=&quot;token variable&quot;&gt;$filename&lt;/span&gt;.ps
-&lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[Polybarの設定終わったぞ]]></title><description><![CDATA[外観  色はNeoVimのOnedarkテーマに揃えた i3blocks…]]></description><link>https://tonooo71.github.io/2018/180607_polybar_setting/180607_polybar_setting/</link><guid isPermaLink="false">https://tonooo71.github.io/2018/180607_polybar_setting/180607_polybar_setting/</guid><pubDate>Thu, 07 Jun 2018 04:24:32 GMT</pubDate><content:encoded>&lt;h2&gt;外観&lt;/h2&gt;
+&lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[Polybarの設定]]></title><description><![CDATA[外観  色はNeoVimのOnedarkテーマに揃えた i3blocks…]]></description><link>https://tonooo71.github.io/2018/180607_polybar_setting/180607_polybar_setting/</link><guid isPermaLink="false">https://tonooo71.github.io/2018/180607_polybar_setting/180607_polybar_setting/</guid><pubDate>Thu, 07 Jun 2018 04:24:32 GMT</pubDate><content:encoded>&lt;h2&gt;外観&lt;/h2&gt;
 &lt;p&gt;&lt;span
       class=&quot;gatsby-resp-image-wrapper&quot;
       style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 590px;&quot;
@@ -1094,7 +1220,7 @@ ws_list &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span cla
         subprocess&lt;span class=&quot;token punctuation&quot;&gt;.&lt;/span&gt;run&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&apos;i3-msg&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&apos;workspace&apos;&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;token builtin&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;(&lt;/span&gt;i&lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;token number&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;)&lt;/span&gt;
         &lt;span class=&quot;token keyword&quot;&gt;break&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h2&gt;Reference&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://github.com/tonooo71/dotfiles/tree/master/.config/polybar&quot;&gt;GitHub-tonooo71:polybar&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Polybar導入するぞ]]></title><description><![CDATA[i3blockでも特に問題ないけど、これは格好良さの問題   Polybar インストール launch.sh(起動スクリプト)   設定ファイル colors bar xbacklight outputで輝度を制御するモニターを選択 formatで書式を選択、 Wiki]]></description><link>https://tonooo71.github.io/2018/180511_polybar/180511_polybar/</link><guid isPermaLink="false">https://tonooo71.github.io/2018/180511_polybar/180511_polybar/</guid><pubDate>Fri, 11 May 2018 04:50:38 GMT</pubDate><content:encoded>&lt;p&gt;i3blockでも特に問題ないけど、これは格好良さの問題  &lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://github.com/tonooo71/dotfiles/tree/master/.config/polybar&quot;&gt;GitHub-tonooo71:polybar&lt;/a&gt;&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Polybar導入する]]></title><description><![CDATA[i3blockでも特に問題ないけど、これは格好良さの問題   Polybar インストール launch.sh(起動スクリプト)   設定ファイル colors bar xbacklight outputで輝度を制御するモニターを選択 formatで書式を選択、 Wiki]]></description><link>https://tonooo71.github.io/2018/180511_polybar/180511_polybar/</link><guid isPermaLink="false">https://tonooo71.github.io/2018/180511_polybar/180511_polybar/</guid><pubDate>Fri, 11 May 2018 04:50:38 GMT</pubDate><content:encoded>&lt;p&gt;i3blockでも特に問題ないけど、これは格好良さの問題  &lt;/p&gt;
 &lt;h2&gt;Polybar&lt;/h2&gt;
 &lt;h3&gt;インストール&lt;/h3&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ yaourt -S polybar
