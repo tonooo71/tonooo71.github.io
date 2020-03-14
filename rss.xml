@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://tonooo71.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 14 Mar 2020 14:32:37 GMT</lastBuildDate><item><title><![CDATA[Gatsbyの導入]]></title><description><![CDATA[このブログはもともと静的サイトジェネレータのHugoを用いて生成したページをGitHub Pagesを利用して公開していたのですが、
-=======
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://tonooo71.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 14 Mar 2020 11:01:41 GMT</lastBuildDate><item><title><![CDATA[Gatsbyの導入]]></title><description><![CDATA[このブログはもともと静的サイトジェネレータのHugoを用いて生成したページをGitHub Pagesを利用して公開していたのですが、
->>>>>>> afff9da58e6a713840578368bcac69435e39f339
-2020年になって久しぶりに更新しようかなと思ったところ、すっかりHugo…]]></description><link>https://tonooo71.github.io/2020/200314_introduce_gatsby/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200314_introduce_gatsby/</guid><pubDate>Tue, 10 Mar 2020 14:33:53 GMT</pubDate><content:encoded>&lt;p&gt;このブログはもともと静的サイトジェネレータのHugoを用いて生成したページをGitHub Pagesを利用して公開していたのですが、
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://tonooo71.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sat, 14 Mar 2020 15:48:20 GMT</lastBuildDate><item><title><![CDATA[Gatsbyの導入]]></title><description><![CDATA[このブログはもともと静的サイトジェネレータのHugoを用いて生成したページをGitHub Pagesを利用して公開していたのですが、
+2020年になって久しぶりに更新しようかなと思ったところ、すっかりHugo…]]></description><link>https://tonooo71.github.io/2020/200310_introduce_gatsby/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200310_introduce_gatsby/</guid><pubDate>Tue, 10 Mar 2020 14:33:53 GMT</pubDate><content:encoded>&lt;p&gt;このブログはもともと静的サイトジェネレータのHugoを用いて生成したページをGitHub Pagesを利用して公開していたのですが、
 2020年になって久しぶりに更新しようかなと思ったところ、すっかりHugoの使い方を忘れてしまっていました。&lt;br&gt;
 そういう理由に加え、また仕事柄Reactを使用するようになったこともあり、せっかくなら新しい静的サイトジェネレータに移行しようかなと思った次第です。  &lt;/p&gt;
 &lt;h2&gt;Gatsbyとは&lt;/h2&gt;
@@ -87,8 +83,6 @@ Gatsbyの導入方法はいろいろありますが、自分はもともとHugo�
 &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; clean
 &lt;span class=&quot;token function&quot;&gt;yarn&lt;/span&gt; build
 
-&lt;span class=&quot;token function&quot;&gt;cp&lt;/span&gt; -r public/* &lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;/githubio/
-
 &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt;
 
 &lt;span class=&quot;token assign-left variable&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;rebuilding site &lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;date&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;`&lt;/span&gt;&lt;/span&gt;&quot;&lt;/span&gt;
@@ -101,6 +95,8 @@ Gatsbyの導入方法はいろいろありますが、自分はもともとHugo�
 
 &lt;span class=&quot;token builtin class-name&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;/githubio
 
+&lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; pull origin master
+&lt;span class=&quot;token function&quot;&gt;cp&lt;/span&gt; -r &lt;span class=&quot;token punctuation&quot;&gt;..&lt;/span&gt;/blog/public/* ./
 &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; &lt;span class=&quot;token function&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;.&lt;/span&gt;
 &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; commit -m &lt;span class=&quot;token string&quot;&gt;&quot;&lt;span class=&quot;token variable&quot;&gt;$msg&lt;/span&gt;&quot;&lt;/span&gt;
 &lt;span class=&quot;token function&quot;&gt;git&lt;/span&gt; push origin master&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
