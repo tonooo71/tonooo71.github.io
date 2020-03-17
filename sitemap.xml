@@ -30,5 +30,14 @@
 <url> <loc>https://tonooo71.github.io/page2</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/page3</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/page4</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tags/Gatsby</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tags/React</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tags/Raspi</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tags/Linux</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tags/i3wm</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tags/Hugo</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tags/Neovim</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tags/ArchLinux</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tags/test</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 </urlset>
