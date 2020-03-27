@@ -89,25 +89,25 @@ bindsym Print exec --no-startup-id import -window root ~/Pictures/screenshot`dat
 <p>~/.config/i3/config</p>
 <div class="gatsby-highlight" data-language="conf"><pre class="language-conf"><code class="language-conf">exec --no-startup-id ~/.config/i3/script/monitor_detect.sh</code></pre></div>
 <p>~/.config/i3/script/monitor_detect.sh</p>
-<div class="gatsby-highlight" data-language="sh"><pre class="language-sh"><code class="language-sh">#!/bin/bash
+<div class="gatsby-highlight" data-language="bash"><pre class="language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 
-#st_prev=$(cat /sys/class/drm/card0-HDMI-A-1/status)
-st_prev=&quot;disconnected&quot;
+<span class="token comment">#st_prev=$(cat /sys/class/drm/card0-HDMI-A-1/status)</span>
+<span class="token assign-left variable">st_prev</span><span class="token operator">=</span><span class="token string">"disconnected"</span>
 
-while :
-do
-    st_next=$(cat /sys/class/drm/card0-HDMI-A-1/status)
-    if [ $st_prev != $st_next ]; then
-        st_prev=$st_next
-        if [ $st_next = &quot;connected&quot; ]; then
+<span class="token keyword">while</span> <span class="token builtin class-name">:</span>
+<span class="token keyword">do</span>
+    <span class="token assign-left variable">st_next</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">cat</span> /sys/class/drm/card0-HDMI-A-1/status<span class="token variable">)</span></span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$st_prev</span> <span class="token operator">!=</span> <span class="token variable">$st_next</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token assign-left variable">st_prev</span><span class="token operator">=</span><span class="token variable">$st_next</span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$st_next</span> <span class="token operator">=</span> <span class="token string">"connected"</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
             xrandr --output eDP1 --mode 1600x900 --output HDMI1 --auto --above eDP1
-        else
+        <span class="token keyword">else</span>
             xrandr --output eDP1 --mode 1600x900 --output HDMI1 --off
-        fi
+        <span class="token keyword">fi</span>
         ~/.fehbg
-    fi
-    sleep 1
-done</code></pre></div>
+    <span class="token keyword">fi</span>
+    <span class="token function">sleep</span> <span class="token number">1</span>
+<span class="token keyword">done</span></code></pre></div>
 <h4>蓋を閉じたときの動作</h4>
 <p>ノートPCなので、蓋を閉じたらサスペンドするように変更します。</p>
 <p>/etc/systemd/logind.conf</p>

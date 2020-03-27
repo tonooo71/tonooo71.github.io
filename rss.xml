@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://tonooo71.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 27 Mar 2020 08:51:38 GMT</lastBuildDate><item><title><![CDATA[Gatsbyブログにタグ機能を追加]]></title><description><![CDATA[はじめに 前記事では、記事一覧ページを複数ページに分割しました。 今回の目的は、 記事に(複数の)タグを追加できるようにし、タグ毎に記事一覧ページを追加する です。 (ジャンルも同様の作業で追加できます)   どのようにタグを追加するかというと、Markdown…]]></description><link>https://tonooo71.github.io/2020/200320_gatsby_blog_tagpage/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200320_gatsby_blog_tagpage/</guid><pubDate>Fri, 20 Mar 2020 22:49:58 GMT</pubDate><content:encoded>&lt;h2&gt;はじめに&lt;/h2&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://tonooo71.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Fri, 27 Mar 2020 08:52:28 GMT</lastBuildDate><item><title><![CDATA[Gatsbyブログにタグ機能を追加]]></title><description><![CDATA[はじめに 前記事では、記事一覧ページを複数ページに分割しました。 今回の目的は、 記事に(複数の)タグを追加できるようにし、タグ毎に記事一覧ページを追加する です。 (ジャンルも同様の作業で追加できます)   どのようにタグを追加するかというと、Markdown…]]></description><link>https://tonooo71.github.io/2020/200320_gatsby_blog_tagpage/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200320_gatsby_blog_tagpage/</guid><pubDate>Fri, 20 Mar 2020 22:49:58 GMT</pubDate><content:encoded>&lt;h2&gt;はじめに&lt;/h2&gt;
 &lt;p&gt;前記事では、記事一覧ページを複数ページに分割しました。&lt;br&gt;
 今回の目的は、&lt;/p&gt;
 &lt;ul&gt;
@@ -1260,25 +1260,25 @@ bindsym Print exec --no-startup-id import -window root ~/Pictures/screenshot`dat
 &lt;p&gt;~/.config/i3/config&lt;/p&gt;
 &lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;conf&quot;&gt;&lt;pre class=&quot;language-conf&quot;&gt;&lt;code class=&quot;language-conf&quot;&gt;exec --no-startup-id ~/.config/i3/script/monitor_detect.sh&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;~/.config/i3/script/monitor_detect.sh&lt;/p&gt;
-&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;sh&quot;&gt;&lt;pre class=&quot;language-sh&quot;&gt;&lt;code class=&quot;language-sh&quot;&gt;#!/bin/bash
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;bash&quot;&gt;&lt;pre class=&quot;language-bash&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;&lt;span class=&quot;token shebang important&quot;&gt;#!/bin/bash&lt;/span&gt;
 
-#st_prev=$(cat /sys/class/drm/card0-HDMI-A-1/status)
-st_prev=&amp;quot;disconnected&amp;quot;
+&lt;span class=&quot;token comment&quot;&gt;#st_prev=$(cat /sys/class/drm/card0-HDMI-A-1/status)&lt;/span&gt;
+&lt;span class=&quot;token assign-left variable&quot;&gt;st_prev&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token string&quot;&gt;&quot;disconnected&quot;&lt;/span&gt;
 
-while :
-do
-    st_next=$(cat /sys/class/drm/card0-HDMI-A-1/status)
-    if [ $st_prev != $st_next ]; then
-        st_prev=$st_next
-        if [ $st_next = &amp;quot;connected&amp;quot; ]; then
+&lt;span class=&quot;token keyword&quot;&gt;while&lt;/span&gt; &lt;span class=&quot;token builtin class-name&quot;&gt;:&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;do&lt;/span&gt;
+    &lt;span class=&quot;token assign-left variable&quot;&gt;st_next&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;&lt;span class=&quot;token variable&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;token function&quot;&gt;cat&lt;/span&gt; /sys/class/drm/card0-HDMI-A-1/status&lt;span class=&quot;token variable&quot;&gt;)&lt;/span&gt;&lt;/span&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$st_prev&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$st_next&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
+        &lt;span class=&quot;token assign-left variable&quot;&gt;st_prev&lt;/span&gt;&lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;token variable&quot;&gt;$st_next&lt;/span&gt;
+        &lt;span class=&quot;token keyword&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;token variable&quot;&gt;$st_next&lt;/span&gt; &lt;span class=&quot;token operator&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;token string&quot;&gt;&quot;connected&quot;&lt;/span&gt; &lt;span class=&quot;token punctuation&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;token punctuation&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;token keyword&quot;&gt;then&lt;/span&gt;
             xrandr --output eDP1 --mode 1600x900 --output HDMI1 --auto --above eDP1
-        else
+        &lt;span class=&quot;token keyword&quot;&gt;else&lt;/span&gt;
             xrandr --output eDP1 --mode 1600x900 --output HDMI1 --off
-        fi
+        &lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;
         ~/.fehbg
-    fi
-    sleep 1
-done&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+    &lt;span class=&quot;token keyword&quot;&gt;fi&lt;/span&gt;
+    &lt;span class=&quot;token function&quot;&gt;sleep&lt;/span&gt; &lt;span class=&quot;token number&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;token keyword&quot;&gt;done&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;h4&gt;蓋を閉じたときの動作&lt;/h4&gt;
 &lt;p&gt;ノートPCなので、蓋を閉じたらサスペンドするように変更します。&lt;/p&gt;
 &lt;p&gt;/etc/systemd/logind.conf&lt;/p&gt;
