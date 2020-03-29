@@ -34,6 +34,7 @@
 <url> <loc>https://tonooo71.github.io/page2</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/page3</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/page4</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tags</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags/Gatsby/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags/React/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags/Raspi/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
