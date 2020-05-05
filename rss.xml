@@ -1,4 +1,156 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://tonooo71.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 05 May 2020 12:48:44 GMT</lastBuildDate><item><title><![CDATA[Gatsbyブログにタグ機能を追加]]></title><description><![CDATA[はじめに 前記事では、記事一覧ページを複数ページに分割しました。 今回の目的は、 記事に(複数の)タグを追加できるようにし、タグ毎に記事一覧ページを追加する です。 (ジャンルも同様の作業で追加できます)   どのようにタグを追加するかというと、Markdown…]]></description><link>https://tonooo71.github.io/2020/200320_gatsby_blog_tagpage/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200320_gatsby_blog_tagpage/</guid><pubDate>Fri, 20 Mar 2020 22:49:58 GMT</pubDate><content:encoded>&lt;h2&gt;はじめに&lt;/h2&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://tonooo71.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 05 May 2020 18:44:40 GMT</lastBuildDate><item><title><![CDATA[デスク周りの環境紹介]]></title><description><![CDATA[はじめに 新型コロナウイルスの影響で、自分が勤務している会社でも…]]></description><link>https://tonooo71.github.io/2020/200505_remotework/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200505_remotework/</guid><pubDate>Tue, 05 May 2020 22:38:08 GMT</pubDate><content:encoded>&lt;h2&gt;はじめに&lt;/h2&gt;
+&lt;p&gt;新型コロナウイルスの影響で、自分が勤務している会社でも4月頭からリモートワークが推奨になりました。&lt;br&gt;
+辛うじてデスクとオフィスチェアは持っていましたが流石に会社のものと比べると品質が天と地(特にオフィスチェアが)。&lt;br&gt;
+なので自宅で仕事するにあたって色々買いそろえてみました。本記事では買ったもののレビューをしつつデスク周りの環境を紹介していこうと思います。  &lt;/p&gt;
+&lt;h2&gt;デスク環境&lt;/h2&gt;
+&lt;p&gt;元々持っていたものは、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://direct.sanwa.co.jp/ItemPage/100-DESKF005BR&quot;&gt;デスク(サンワサプライ)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;モニター(Acer)×2&lt;/li&gt;
+&lt;li&gt;マウスパッド - G640(logicool)&lt;/li&gt;
+&lt;li&gt;マウス - G703(logicool)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.irisplaza.co.jp/index.php?KB=SHOSAI&amp;#x26;SID=7058272F&quot;&gt;オフィスチェア(アイリスオーヤマ)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;買ったものは、&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.steelcase.com/asia-ja/products/office-chairs/think/&quot;&gt;オフィスチェア - Steelcase Think&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.archisite.co.jp/products/mistel/barocco-md770/&quot;&gt;キーボード - Mistel Barocco MD770 静音赤軸&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.diatec.co.jp/shop/det.php?prod_c=4682&quot;&gt;パームレスト - FILCO Genuine Wood Wrist Rest S size 分離型(2分割)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.kensington.com/ja-jp/p/products/control/trackballs/-/&quot;&gt;トラックボール - Kensington Expert Mouse Wireless Trackball&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;https://www.amazon.co.jp/Amazon%E3%83%99%E3%83%BC%E3%82%B7%E3%83%83%E3%82%AF-AmazonBasics-SBD86WD-%E3%82%B2%E3%83%BC%E3%83%A0%E7%94%A8%E3%83%9E%E3%82%A6%E3%82%B9%E3%83%91%E3%83%83%E3%83%89-%E6%A8%99%E6%BA%96%E3%82%B5%E3%82%A4%E3%82%BA/dp/B06X19FLTC?th=1&quot;&gt;マウスパッド - Amazonベーシック マウスパッド ゲーム用 拡張サイズ&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;オフィスチェアは必要に迫られて買いましたが、他は衝動買いしたようなものです。&lt;br&gt;
+本当なら試座したり試用したりして決めたかったですが(特にオフィスチェア)、このご時世ではそうもいっていられないので調べるだけ調べてネットショップで購入しました。&lt;br&gt;
+下にデスク周りの画像を貼っておきます、正直なところ会社よりも環境がよくなってしまった感じがあります。  &lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 590px;&quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/b035aab13e735ef6d5b24c2de7cb39ae/d2602/all.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 75%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAPABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAMEBf/EABUBAQEAAAAAAAAAAAAAAAAAAAEC/9oADAMBAAIQAxAAAAFkbpQ3jFJr/8QAGhAAAgMBAQAAAAAAAAAAAAAAAQIAAyIEE//aAAgBAQABBQK6wLFu0hx0oTPMqgcqP//EABYRAAMAAAAAAAAAAAAAAAAAABARIf/aAAgBAwEBPwFUf//EABURAQEAAAAAAAAAAAAAAAAAABAR/9oACAECAQE/Aaf/xAAaEAACAgMAAAAAAAAAAAAAAAAAAQIREjGR/9oACAEBAAY/Ai5IVsyLfDZ//8QAGxAAAgIDAQAAAAAAAAAAAAAAAREAMSFBUYH/2gAIAQEAAT8heg26gTjHAhK12BhsNRLU/EAAMLqf/9oADAMBAAIAAwAAABAoL//EABcRAQEBAQAAAAAAAAAAAAAAAAEAEUH/2gAIAQMBAT8QyB6W3//EABcRAAMBAAAAAAAAAAAAAAAAAAABEUH/2gAIAQIBAT8QTyLSH//EABwQAQEAAgIDAAAAAAAAAAAAAAERACFBUTFh4f/aAAgBAQABPxAeviTKd3rFgEAgS783LkVVjeCqIN4zXzFkkO+3esCIIBS6S9Z//9k=&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;all&quot;
+        title=&quot;all&quot;
+        src=&quot;/static/b035aab13e735ef6d5b24c2de7cb39ae/1c72d/all.jpg&quot;
+        srcset=&quot;/static/b035aab13e735ef6d5b24c2de7cb39ae/a80bd/all.jpg 148w,
+/static/b035aab13e735ef6d5b24c2de7cb39ae/1c91a/all.jpg 295w,
+/static/b035aab13e735ef6d5b24c2de7cb39ae/1c72d/all.jpg 590w,
+/static/b035aab13e735ef6d5b24c2de7cb39ae/a8a14/all.jpg 885w,
+/static/b035aab13e735ef6d5b24c2de7cb39ae/fbd2c/all.jpg 1180w,
+/static/b035aab13e735ef6d5b24c2de7cb39ae/d2602/all.jpg 4032w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;それでは、買ったものについてまとめてレビューしていきます。&lt;br&gt;
+本当は分割したほうがいいのでしょうが、面倒なので仕方ないですね…  &lt;/p&gt;
+&lt;h2&gt;Mistel Barocco MD770 静音赤軸&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://www.archisite.co.jp/wp-content/uploads/2020/01/MD770-12-1200x900.jpg&quot; alt=&quot;Mistel Barocco MD770&quot;&gt;&lt;/p&gt;
+&lt;p&gt;英語配列のメカニカル分割キーボードです、ちなみに初分割キーボードです。&lt;br&gt;
+もともと会社で使おうと思って2月中旬には注文していたのですが、届いたのはリモートワークが始まった3月下旬でした。&lt;br&gt;
+もともと使っていたのは&lt;a href=&quot;https://www.archisite.co.jp/products/archiss/progres-touch/retro-tkl-jp/&quot;&gt;Progress Touch RETRO TKL&lt;/a&gt;の静音赤軸・JIS配列だったので、それとの比較も踏まえてレビューします。  &lt;/p&gt;
+&lt;h3&gt;分割キーボードってどう?&lt;/h3&gt;
+&lt;p&gt;慣れれば普通に使えます。&lt;br&gt;
+正直、そこまで慣れるのに時間はかからないと思います。ただ、例えば左のキーボードにあるキーを右手で打っているような人は当然慣れるのは難しいと思いますけど。&lt;br&gt;
+個人的には、英語配列への適応の方が時間かかりました。(というか現在進行形で苦しんでいます)&lt;br&gt;
+打つ姿勢でいうと、肩をすぼめてキーボードを叩く必要がなくなるため気持ち肩周りの疲れやコリが減ったような気がします、気がしますというのは正直普通のキーボードを打ってた頃もそこまで疲れを感じていなかったので劇的に変わった感じがしなかったからですね…&lt;br&gt;
+因みに自分はキーボード間を45cm程開けて使用しているのですが、付属の左右のキーボードを接続するUSB Type-Cケーブルだと45cm開けるのは無理なので、代わりに&lt;a href=&quot;https://www.amazon.co.jp/gp/product/B071WNXY1R/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&amp;#x26;psc=1&quot;&gt;AnkerのUSB Type-Cケーブル&lt;/a&gt;を購入しました。
+付属のケーブルがバネ状になっており弾性力が結構強いため、精々広げられて20cm程なのは人によっては注意が必要な点かもしれません。  &lt;/p&gt;
+&lt;h3&gt;その他&lt;/h3&gt;
+&lt;p&gt;他のレビューでも言及されていますが、キーボードの足はキーボードにダメージが入らないように付け外し可能であって欲しかったですね。&lt;br&gt;
+パームレストは定番のFILCOのウッドパームリストを買いました、機能的にはよくわからないですが見た目が良い。  &lt;/p&gt;
+&lt;h2&gt;Kensington Expert Mouse Wireless Trackball&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://media.accobrandspartner.com/sections/mediaBankPreview.aspx?id=265730&amp;#x26;width=400px&amp;#x26;height=400px&quot; alt=&quot;Trackball&quot;&gt;&lt;/p&gt;
+&lt;p&gt;完全に衝動買いしました。&lt;br&gt;
+肩幅よりちょっと広いぐらいに分割キーボードを配置するとマウスを置く場所に困るんですよね、外に置いても内に置いても変な腕の角度でマウスを操作しないといけないので…&lt;br&gt;
+レビューといっても届いたのが昨日で特に書くことないので、ファーストインプレッション程度に留めます。  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;でかい&lt;/li&gt;
+&lt;li&gt;Kensington Works(設定ソフトウェア)が良い、Linuxで使えないのが辛い&lt;/li&gt;
+&lt;li&gt;個人的には3時間も使うと慣れる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;まあ、マウスに比べれば姿勢も楽だし取り敢えず使い続けてみようと思います。&lt;br&gt;
+あと将来的には左手でも使えるようになりたいですね。  &lt;/p&gt;
+&lt;p&gt;キーボードとトラックボールの配置はこんな感じです。&lt;/p&gt;
+&lt;p&gt;&lt;span
+      class=&quot;gatsby-resp-image-wrapper&quot;
+      style=&quot;position: relative; display: block; margin-left: auto; margin-right: auto;  max-width: 590px;&quot;
+    &gt;
+      &lt;a
+    class=&quot;gatsby-resp-image-link&quot;
+    href=&quot;/static/c17297e95fe587c872d071a1ec8bd62e/d2602/desk.jpg&quot;
+    style=&quot;display: block&quot;
+    target=&quot;_blank&quot;
+    rel=&quot;noopener&quot;
+  &gt;
+    &lt;span
+    class=&quot;gatsby-resp-image-background-image&quot;
+    style=&quot;padding-bottom: 75%; position: relative; bottom: 0; left: 0; background-image: url(&apos;data:image/jpeg;base64,/9j/2wBDABALDA4MChAODQ4SERATGCgaGBYWGDEjJR0oOjM9PDkzODdASFxOQERXRTc4UG1RV19iZ2hnPk1xeXBkeFxlZ2P/2wBDARESEhgVGC8aGi9jQjhCY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2P/wgARCAAPABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAgADBf/EABUBAQEAAAAAAAAAAAAAAAAAAAAB/9oADAMBAAIQAxAAAAHnvJI5y//EABwQAAICAgMAAAAAAAAAAAAAAAECAAMEERMUQf/aAAgBAQABBQLnaHJsM7NkDbXyxgrf/8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAwEBPwE//8QAFBEBAAAAAAAAAAAAAAAAAAAAEP/aAAgBAgEBPwE//8QAHhAAAgEDBQAAAAAAAAAAAAAAAAECEBESEzFBcZH/2gAIAQEABj8CWKUTc48EsV3S2nE//8QAHBAAAgICAwAAAAAAAAAAAAAAAAERITFBUYGh/9oACAEBAAE/IXohdLZ3acHJ4CIXjTLISYsjrMH/2gAMAwEAAgADAAAAEE8P/8QAFREBAQAAAAAAAAAAAAAAAAAAACH/2gAIAQMBAT8QR//EABcRAQADAAAAAAAAAAAAAAAAAAAhMVH/2gAIAQIBAT8QtOP/xAAbEAEAAwEBAQEAAAAAAAAAAAABABEhMVFxwf/aAAgBAQABPxBBSNgt1t95DwQAKAprlxRtJ9W/JpwjD26xIhibKfpjqXn2f//Z&apos;); background-size: cover; display: block;&quot;
+  &gt;&lt;/span&gt;
+  &lt;img
+        class=&quot;gatsby-resp-image-image&quot;
+        alt=&quot;desk&quot;
+        title=&quot;desk&quot;
+        src=&quot;/static/c17297e95fe587c872d071a1ec8bd62e/1c72d/desk.jpg&quot;
+        srcset=&quot;/static/c17297e95fe587c872d071a1ec8bd62e/a80bd/desk.jpg 148w,
+/static/c17297e95fe587c872d071a1ec8bd62e/1c91a/desk.jpg 295w,
+/static/c17297e95fe587c872d071a1ec8bd62e/1c72d/desk.jpg 590w,
+/static/c17297e95fe587c872d071a1ec8bd62e/a8a14/desk.jpg 885w,
+/static/c17297e95fe587c872d071a1ec8bd62e/fbd2c/desk.jpg 1180w,
+/static/c17297e95fe587c872d071a1ec8bd62e/d2602/desk.jpg 4032w&quot;
+        sizes=&quot;(max-width: 590px) 100vw, 590px&quot;
+        style=&quot;width:100%;height:100%;margin:0;vertical-align:middle;position:absolute;top:0;left:0;&quot;
+        loading=&quot;lazy&quot;
+      /&gt;
+  &lt;/a&gt;
+    &lt;/span&gt;&lt;/p&gt;
+&lt;h2&gt;Steelcase Think&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://thumbnail.image.rakuten.co.jp/@0_mall/office-com/cabinet/steelcase/sc1/ksc-thi-bam3d-f_050.jpg&quot; alt=&quot;think&quot;&gt;&lt;/p&gt;
+&lt;p&gt;一番高い(約10万円)買い物だったので、悩みましたが結論から言うと満足しています。&lt;br&gt;
+こういったオフィスチェアを選ぶとき、選択肢としてはゲーミングチェアが安価でよく上がっている印象があるのですが、個人的にはあまりそそられないです。&lt;br&gt;
+ゲーミングチェアは少し試座しただけなので長時間座ると違う印象になるのかもしれないですが、革のカバーは暑苦しく感じたし、仕事するうえでハイバックとヘッドサポートは全く必要ないですしね。&lt;br&gt;
+なので自分は最初から候補としては除いて以下を候補として考えていました。  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Herman Mirror アーロンチェア&lt;/li&gt;
+&lt;li&gt;Steelcase Leap&lt;/li&gt;
+&lt;li&gt;オカムラ コンテッサ&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;どれも10万越えの所謂高級オフィスチェアと呼ばれるものです。&lt;br&gt;
+中途半端に高いものを買って後悔してもなあ、と思ったので思い切ってこの価格帯のものをターゲットに探していました。&lt;br&gt;
+レビューを読み漁った感じだと、アーロンチェアは良いものだが人を選ぶ、コンテッサは小柄な人が向いてやすい(?)といった感じでしょうか。(というか値段が値段なのでそもそもレビューが少ない)&lt;br&gt;
+最終的にはLeapを中古で買おうかと思ってたところで見つけたのが同じSteelcase社のThinkチェアでした。  &lt;/p&gt;
+&lt;p&gt;…  &lt;/p&gt;
+&lt;p&gt;…  &lt;/p&gt;
+&lt;p&gt;といってもネットで入る情報は先ほどの3品種よりも少なく大した情報が手に入らなかったので、何故このチェアを選んだのか(特にLeapと比べて)を述べます。  &lt;/p&gt;
+&lt;h4&gt;Leapより新しい&lt;/h4&gt;
+&lt;p&gt;Leapの最新モデルV2の発売年は2006年、Thinkの最新モデルの発売年は2015年です。&lt;/p&gt;
+&lt;h4&gt;Leapよりカスタマイズ性が低い&lt;/h4&gt;
+&lt;p&gt;Leapは様々な箇所でカスタマイズできますが、Thinkはランバーサポートと座面の前後ぐらいです。&lt;br&gt;
+カスタマイズ性が低いほうがいいのか、と思うかもしれないですが、逆にそこまで自分の体に適したように自分だけでカスタマイズできるのかというのが懸念点でした。&lt;br&gt;
+Thinkは公式サイトで「シンプル」と謳われているように、最小限のカスタマイズ性に留め、後はチェアの基本機能でサポートするというデザインが個人的に好印象でした。&lt;/p&gt;
+&lt;h4&gt;背面がメッシュ&lt;/h4&gt;
+&lt;p&gt;Leapは座面も背面もクッションですが、Thinkは背面がメッシュになっています。  &lt;/p&gt;
+&lt;p&gt;ランバーサポート・LiveBack機能・アジャスタブルアームといった機能については、LeapとThinkどちらも搭載されています。&lt;br&gt;
+こういった理由でLeapではなくThinkを購入することに決めました。(後は値段も若干Thinkのほうが安かったというのも弱いですが理由の一つです)&lt;/p&gt;
+&lt;h2&gt;Amazonベーシック マウスパッド ゲーム用 拡張サイズ&lt;/h2&gt;
+&lt;p&gt;ついでに書きます、logicool G640との比較です。  &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;滑る&lt;/li&gt;
+&lt;li&gt;ホコリがたまる(汚れやすい)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;以上です。&lt;/p&gt;</content:encoded></item><item><title><![CDATA[Gatsbyブログにタグ機能を追加]]></title><description><![CDATA[はじめに 前記事では、記事一覧ページを複数ページに分割しました。 今回の目的は、 記事に(複数の)タグを追加できるようにし、タグ毎に記事一覧ページを追加する です。 (ジャンルも同様の作業で追加できます)   どのようにタグを追加するかというと、Markdown…]]></description><link>https://tonooo71.github.io/2020/200320_gatsby_blog_tagpage/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200320_gatsby_blog_tagpage/</guid><pubDate>Fri, 20 Mar 2020 22:49:58 GMT</pubDate><content:encoded>&lt;h2&gt;はじめに&lt;/h2&gt;
 &lt;p&gt;前記事では、記事一覧ページを複数ページに分割しました。&lt;br&gt;
 今回の目的は、&lt;/p&gt;
 &lt;ul&gt;
