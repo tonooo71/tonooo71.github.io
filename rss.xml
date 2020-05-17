@@ -1,4 +1,37 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://tonooo71.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Tue, 05 May 2020 19:40:58 GMT</lastBuildDate><item><title><![CDATA[デスク周りの環境紹介]]></title><description><![CDATA[はじめに 新型コロナウイルスの影響で、自分が勤務している会社でも…]]></description><link>https://tonooo71.github.io/2020/200505_remotework/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200505_remotework/</guid><pubDate>Tue, 05 May 2020 22:38:08 GMT</pubDate><content:encoded>&lt;h2&gt;はじめに&lt;/h2&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[RINotes]]></title><description><![CDATA[A blog.]]></description><link>https://tonooo71.github.io</link><generator>GatsbyJS</generator><lastBuildDate>Sun, 17 May 2020 13:19:44 GMT</lastBuildDate><item><title><![CDATA[Raspberry Pi 4にArch Linuxをインストール]]></title><description><![CDATA[Arch LinuxをRaspberry Pi にインストールする インストールまでの手順などは基本的な情報はArch Wikiにまとまっているので、インストール後の設定について、また引っかかった点などをまとめていきます。   SSHするにあたって インストール後はSSH…]]></description><link>https://tonooo71.github.io/2020/200517_setup_archlinux_on_raspi/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200517_setup_archlinux_on_raspi/</guid><pubDate>Sun, 17 May 2020 20:58:36 GMT</pubDate><content:encoded>&lt;h2&gt;Arch LinuxをRaspberry Pi にインストールする&lt;/h2&gt;
+&lt;p&gt;インストールまでの手順などは基本的な情報は&lt;a href=&quot;https://wiki.archlinux.jp/index.php/Raspberry_Pi#Raspberry_Pi_4&quot;&gt;Arch Wiki&lt;/a&gt;にまとまっているので、インストール後の設定について、また引っかかった点などをまとめていきます。  &lt;/p&gt;
+&lt;h2&gt;SSHするにあたって&lt;/h2&gt;
+&lt;p&gt;インストール後はSSHでRaspberry Piにアクセスします。&lt;br&gt;
+このとき、アクセス元のターミナルによってはエラーが出たり、うまくキーボードのキー入力が反映されなかったりします。&lt;br&gt;
+これは、アクセスもとの環境変数$TERMがSSHでアクセスした先にも引き継がれることが原因で、アクセスした先(この場合はRaspberry Pi側)に環境変数で指定されたターミナルのterminfoファイルが存在しないため引き起こされるものです。&lt;br&gt;
+自分はTermiteを使用しており環境変数$TERMは&lt;code class=&quot;language-text&quot;&gt;xterm-termite&lt;/code&gt;となっていましたが、&lt;code class=&quot;language-text&quot;&gt;xterm-termite.terminfo&lt;/code&gt;ファイルがRaspberry Pi側の&lt;code class=&quot;language-text&quot;&gt;/usr/share/terminfo/x/&lt;/code&gt;フォルダ内に存在しておらず、バックスペースキーの入力が画面に反映されないという問題が生じていました。&lt;br&gt;
+そこで、アクセス元のPCの&lt;code class=&quot;language-text&quot;&gt;/usr/share/terminfo/x/xterm-termite.terminfo&lt;/code&gt;ファイルをRaspberry Pi側の&lt;code class=&quot;language-text&quot;&gt;/usr/share/terminfo/x/&lt;/code&gt;フォルダ内にSCPを使ってコピーすることでこの問題は解消されました。&lt;/p&gt;
+&lt;h2&gt;初めてpacmanを利用するとき&lt;/h2&gt;
+&lt;p&gt;はじめはパッケージのインストールやアップグレードには&lt;code class=&quot;language-text&quot;&gt;pacman&lt;/code&gt;を利用すると思いますが、その際以下のような出力が表示されることがあります。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;warning: Public keyring not found; have you run &amp;#39;pacman-key --init&amp;#39;?
+downloading required keys...
+error: keyring is not writable
+error: keyring is not writable
+error: keyring is not writable
+error: keyring is not writable
+...&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;キーリングが見つからないと出ているので、出力されたとおりに&lt;code class=&quot;language-text&quot;&gt;pacman-key --init&lt;/code&gt;を実行してみる。&lt;br&gt;
+そして再び&lt;code class=&quot;language-text&quot;&gt;pacman -Syyu&lt;/code&gt;などを実行してみると、自分の環境では以下のような出力となりパッケージのアップデートに失敗してしまいました。  &lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;downloading required keys...
+:: Import PGP key 77193F152BDBE6A6, &amp;quot;Arch Linux ARM Build System &amp;lt;builder+xu6@archlinuxarm.org&amp;gt;&amp;quot;? [Y/n] 
+error: key &amp;quot;77193F152BDBE6A6&amp;quot; could not be looked up remotely
+:: Import PGP key 77193F152BDBE6A6, &amp;quot;Arch Linux ARM Build System &amp;lt;builder+xu6@archlinuxarm.org&amp;gt;&amp;quot;? [Y/n] 
+error: key &amp;quot;77193F152BDBE6A6&amp;quot; could not be looked up remotely
+...&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;いろいろ検索して&lt;code class=&quot;language-text&quot;&gt;pacman-key --refresh-keys&lt;/code&gt;や&lt;code class=&quot;language-text&quot;&gt;pacman -S archlinux-keyring&lt;/code&gt;を実行しても、以前パッケージのアップデートができなかったりそもそもそれらのコマンドが失敗するばかりでした。&lt;br&gt;
+最終的には&lt;a href=&quot;https://wiki.archlinux.jp/index.php/Pacman-key#.E9.8D.B5.E3.82.92.E3.82.A4.E3.83.B3.E3.83.9D.E3.83.BC.E3.83.88.E3.81.A7.E3.81.8D.E3.81.AA.E3.81.84&quot;&gt;Arch Wiki&lt;/a&gt;を参考に&lt;code class=&quot;language-text&quot;&gt;pacman-key --populate archlinuxarm&lt;/code&gt;を実行したところアップデートに無事成功しました。(Wikiとは異なりarchlinuxのところをarchlinuxarmに変更する点に注意です)&lt;/p&gt;
+&lt;h2&gt;Wi-Fiに接続する&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&quot;https://tomosoft.jp/design/?p=10356#ArchLinux&quot;&gt;こちら&lt;/a&gt;を参考に、以下のコマンドを入力していきます。&lt;br&gt;
+事前に&lt;code class=&quot;language-text&quot;&gt;wpa_supplicant&lt;/code&gt;のインストールが必要です。&lt;/p&gt;
+&lt;div class=&quot;gatsby-highlight&quot; data-language=&quot;text&quot;&gt;&lt;pre class=&quot;language-text&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;wifi-menu -o
+
+netctl enable _profile
+netctl start _profile&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</content:encoded></item><item><title><![CDATA[デスク周りの環境紹介]]></title><description><![CDATA[はじめに 新型コロナウイルスの影響で、自分が勤務している会社でも…]]></description><link>https://tonooo71.github.io/2020/200505_remotework/</link><guid isPermaLink="false">https://tonooo71.github.io/2020/200505_remotework/</guid><pubDate>Tue, 05 May 2020 22:38:08 GMT</pubDate><content:encoded>&lt;h2&gt;はじめに&lt;/h2&gt;
 &lt;p&gt;新型コロナウイルスの影響で、自分が勤務している会社でも4月頭からリモートワークが推奨になりました。&lt;br&gt;
 辛うじてデスクとオフィスチェアは持っていましたが流石に会社のものと比べると品質が天と地(特にオフィスチェアが)。&lt;br&gt;
 なので自宅で仕事するにあたって色々買いそろえてみました。本記事では買ったもののレビューをしつつデスク周りの環境を紹介していこうと思います。  &lt;/p&gt;
