@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<url> <loc>https://tonooo71.github.io/2020/200811_react-accordion-menu-like-vscode/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/2020/200517_setup_archlinux_on_raspi/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/2020/200505_remotework/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/2020/200320_gatsby_blog_tagpage/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -36,7 +37,9 @@
 <url> <loc>https://tonooo71.github.io/page2</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/page3</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/page4</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/page5</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tags/React/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags/ArchLinux/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags/Linux/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags/Linux/page2</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -44,7 +47,6 @@
 <url> <loc>https://tonooo71.github.io/tags/Raspi/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags/ガジェット/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags/Gatsby/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://tonooo71.github.io/tags/React/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags/i3wm/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags/Hugo/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tags/Neovim/page1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
