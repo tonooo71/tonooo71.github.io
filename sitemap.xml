@@ -6,7 +6,6 @@
 <url> <loc>https://tonooo71.github.io/posts/polybar</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/polybar-setting</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/enscript</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
-<url> <loc>https://tonooo71.github.io/posts/reinstall-arch</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/virtualbox-vkms</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/i3wm-and-Arch-Linux</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/neovimlsp</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -14,6 +13,7 @@
 <url> <loc>https://tonooo71.github.io/posts/pocket-for-qb</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/ejdict-for-qb</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/raspberry-pi-ipv4-and-ipv6</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/posts/reinstall-arch</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/dropdownmenu-react-hooks</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/remotework-environment</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/archlinux-on-raspberrypi4</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
