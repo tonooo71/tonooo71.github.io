@@ -19,8 +19,11 @@
 <url> <loc>https://tonooo71.github.io/posts/archlinux-on-raspberrypi4</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/building-my-new-mini-itx-pc</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/posts/sesame</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/posts/change-blog</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tag/arch-linux</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tag/diary</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tag/gadget</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/tag/gatsby</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tag/linux</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tag/linux/page/1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/tag/linux/page/2</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
@@ -33,8 +36,10 @@
 <url> <loc>https://tonooo71.github.io/category/article/page/1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/category/article/page/2</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/category/article/page/3</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/category/article/page/4</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/page/1</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/page/2</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 <url> <loc>https://tonooo71.github.io/page/3</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
+<url> <loc>https://tonooo71.github.io/page/4</loc> <changefreq>daily</changefreq> <priority>0.7</priority> </url>
 </urlset>
