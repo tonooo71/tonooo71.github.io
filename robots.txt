@@ -1,4 +1,0 @@
-User-agent: *
-Disallow:
-Sitemap: https://tonooo71.github.io/sitemap.xml
-Host: https://tonooo71.github.io
